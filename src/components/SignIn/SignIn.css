@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  background-image: url(https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg);
+  margin: 0;
+  padding: 0;
+}
+
+.signin-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.signin-logo {
+  height: 60px;
+  width: auto;
+}
+
+.signin-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 100px); /* subtract header height */
+  margin-left: 300px;
+}
+
+.signin-form {
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  text-align: center;
+  margin-right: 350px;
+}
+
+.signin-form h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333333;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #cccccc;
+  border-radius: 5px;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #fd3470;
+  color: #ffffff;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #e42b60;
+}
+
+.signup-link {
+  margin-top: 20px;
+}
+
+.signup-link a {
+  color: #ec316c;
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}

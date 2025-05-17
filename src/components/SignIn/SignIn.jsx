@@ -1,21 +1,23 @@
-// export default SignIn;
+// SignIn.jsx
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // 👈 NEW
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase"; // adjust path if needed
+import { auth } from "../../firebase";
 import "./SignIn.css";
 
 const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate(); // 👈 Hook for navigation
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      alert("hi 🎉"); // 👈 Success
+      navigate("/profile"); // 👈 Redirect after login
     } catch (error) {
       console.error(error.message);
-      alert("Incorrect email or password"); // 👈 Error message
+      alert("Incorrect email or password");
     }
   };
 
@@ -47,7 +49,11 @@ const SignIn = () => {
         <div className="signup-link">
           <p>
             New here?{" "}
-            <a href="https://amutatbh.com/artist-register/">
+            <a
+              href="https://amutatbh.com/artist-register/"
+              target="_blank"
+              rel="noreferrer"
+            >
               Sign up now on the main website
             </a>
           </p>
