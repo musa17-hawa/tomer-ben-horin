@@ -4,12 +4,17 @@
 // import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 // import { onAuthStateChanged, signOut } from "firebase/auth";
 // import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+// import jsPDF from "jspdf";
+// import html2canvas from "html2canvas";
+// import { useRef } from "react";
+
 // import "./Profile.css";
 
 // const Profile = () => {
 //   const [profile, setProfile] = useState(null);
 //   const [loading, setLoading] = useState(true);
 //   const [message, setMessage] = useState("");
+//   const [errors, setErrors] = useState({});
 //   const [imageFile, setImageFile] = useState(null);
 //   const [previewImage, setPreviewImage] = useState(null);
 //   const navigate = useNavigate();
@@ -67,12 +72,30 @@
 
 //   const handleSave = async () => {
 //     if (!profile) return;
+
 //     const { name, bio, subject, group, email, place } = profile;
-//     if (!name || !bio || !subject || !email || !place) {
-//       setMessage("Please fill in all required fields.");
+//     const newErrors = {};
+
+//     if (!name) newErrors.name = "שדה חובה";
+//     if (!bio) newErrors.bio = "שדה חובה";
+//     if (!subject) newErrors.subject = "שדה חובה";
+//     if (!email) newErrors.email = "שדה חובה";
+//     if (!place) newErrors.place = "שדה חובה";
+
+//     const stringFields = { name, bio, subject, email, place };
+//     for (const [key, value] of Object.entries(stringFields)) {
+//       if (/^\d+$/.test(value)) {
+//         newErrors[key] = "אסור להזין מספר בלבד";
+//       }
+//     }
+
+//     if (Object.keys(newErrors).length > 0) {
+//       setErrors(newErrors);
+//       setMessage("");
 //       return;
 //     }
 
+//     setErrors({});
 //     try {
 //       const imageUrl = await handleImageUpload();
 //       const updatedProfile = { ...profile, image: imageUrl };
@@ -129,6 +152,7 @@
 //               <span className="label-text">
 //                 שם<span className="required-marker">*</span>
 //               </span>
+//               {errors.name && <p className="field-error">{errors.name}</p>}
 //               <input
 //                 id="name"
 //                 name="name"
@@ -141,6 +165,7 @@
 //               <span className="label-text">
 //                 bio / ביו<span className="required-marker">*</span>
 //               </span>
+//               {errors.bio && <p className="field-error">{errors.bio}</p>}
 //               <textarea
 //                 id="bio"
 //                 name="bio"
@@ -153,6 +178,9 @@
 //               <span className="label-text">
 //                 תחום האומנות<span className="required-marker">*</span>
 //               </span>
+//               {errors.subject && (
+//                 <p className="field-error">{errors.subject}</p>
+//               )}
 //               <input
 //                 id="subject"
 //                 name="subject"
@@ -163,6 +191,7 @@
 
 //             <label htmlFor="group" className="profile-label">
 //               <span className="label-text">קבוצת אמנים</span>
+//               {errors.group && <p className="field-error">{errors.group}</p>}
 //               <input
 //                 id="group"
 //                 name="group"
@@ -175,6 +204,7 @@
 //               <span className="label-text">
 //                 Email / אימייל<span className="required-marker">*</span>
 //               </span>
+//               {errors.email && <p className="field-error">{errors.email}</p>}
 //               <input
 //                 id="email"
 //                 name="email"
@@ -187,6 +217,7 @@
 //               <span className="label-text">
 //                 אזור מגורים<span className="required-marker">*</span>
 //               </span>
+//               {errors.place && <p className="field-error">{errors.place}</p>}
 //               <input
 //                 id="place"
 //                 name="place"
@@ -212,13 +243,15 @@
 // };
 
 // export default Profile;
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { auth, db, storage } from "../../firebase";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 import "./Profile.css";
 
 const Profile = () => {
@@ -229,6 +262,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
+  const profileRef = useRef(); // 📌 Ref for PDF export
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -328,11 +362,31 @@ const Profile = () => {
     }
   };
 
+  const handleExportPDF = async () => {
+    const input = profileRef.current;
+    if (!input) return;
+
+    try {
+      const canvas = await html2canvas(input);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("profile.pdf");
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+      setMessage("Failed to export PDF.");
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (!profile) return <p>{message}</p>;
 
   return (
-    <div className="profile-container">
+    <div className="profile-container" ref={profileRef}>
       <form className="profile-form">
         <div className="profile-picture-section">
           <h3>Profile Picture</h3>
@@ -444,6 +498,9 @@ const Profile = () => {
             </button>
             <button type="button" onClick={handleLogout}>
               Logout
+            </button>
+            <button type="button" onClick={handleExportPDF}>
+              Download as PDF
             </button>
           </div>
           <p>{message}</p>
