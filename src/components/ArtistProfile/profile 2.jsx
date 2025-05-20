@@ -7,6 +7,7 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
+
 import "./Profile.css";
 
 const Profile = () => {
@@ -17,8 +18,7 @@ const Profile = () => {
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const navigate = useNavigate();
-  const profileRef = useRef(); // visible form
-  const printRef = useRef(); // clean export
+  const profileRef = useRef(); // 📌 Ref for PDF export
 
   useEffect(() => {
     const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
@@ -41,6 +41,7 @@ const Profile = () => {
         setLoading(false);
       }
     });
+
     return () => unsubscribeAuth();
   }, []);
 
@@ -72,8 +73,10 @@ const Profile = () => {
 
   const handleSave = async () => {
     if (!profile) return;
+
     const { name, bio, subject, group, email, place } = profile;
     const newErrors = {};
+
     if (!name) newErrors.name = "שדה חובה";
     if (!bio) newErrors.bio = "שדה חובה";
     if (!subject) newErrors.subject = "שדה חובה";
@@ -116,14 +119,17 @@ const Profile = () => {
   };
 
   const handleExportPDF = async () => {
-    const input = printRef.current;
+    const input = profileRef.current;
     if (!input) return;
+
     try {
-      const canvas = await html2canvas(input, { scale: 2 });
+      const canvas = await html2canvas(input);
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
+      const imgProps = pdf.getImageProperties(imgData);
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
       pdf.save("profile.pdf");
     } catch (error) {
@@ -137,8 +143,6 @@ const Profile = () => {
 
   return (
     <div className="profile-container" ref={profileRef}>
-      {/* ... All form JSX as you already wrote ... */}
-      {/* Add your existing form and image inputs here */}
       <form className="profile-form">
         <div className="profile-picture-section">
           <h3>Profile Picture</h3>
@@ -262,54 +266,23 @@ const Profile = () => {
                 <QRCodeCanvas value={profile.link} size={128} />
               </div>
             )}
-          </div>
 
-          <div className="actions">
-            <button type="button" onClick={handleSave}>
-              Save changes
-            </button>
-            <button type="button" onClick={handleLogout}>
-              Logout
-            </button>
-            <button type="button" onClick={handleExportPDF}>
-              Download as PDF
-            </button>
+            <div className="actions">
+              <button type="button" onClick={handleSave}>
+                Save changes
+              </button>
+              <button type="button" onClick={handleLogout}>
+                Logout
+              </button>
+              <button type="button" onClick={handleExportPDF}>
+                Download as PDF
+              </button>
+            </div>
+
+            <p>{message}</p>
           </div>
         </div>
       </form>
-
-      {/* ✅ Hidden print-friendly version */}
-      <div ref={printRef} style={{ position: "absolute", top: "-10000px" }}>
-        <h1>{profile.name}</h1>
-        <img
-          src={profile.image || "https://via.placeholder.com/140"}
-          alt="Profile"
-          style={{ width: "120px", height: "120px" }}
-        />
-        <p>
-          <strong>Bio:</strong> {profile.bio}
-        </p>
-        <p>
-          <strong>Subject:</strong> {profile.subject}
-        </p>
-        <p>
-          <strong>Group:</strong> {profile.group}
-        </p>
-        <p>
-          <strong>Email:</strong> {profile.email}
-        </p>
-        <p>
-          <strong>Location:</strong> {profile.place}
-        </p>
-        {profile.link && (
-          <span>
-            <p>
-              <strong>Link:</strong> {profile.link}
-            </p>
-            <QRCodeCanvas value={profile.link} size={100} />
-          </span>
-        )}
-      </div>
     </div>
   );
 };
