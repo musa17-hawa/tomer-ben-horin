@@ -1,0 +1,12 @@
+.artist-detail-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.detail-title {
+  font-size: 32px;
+  color: #333;
+  text-align: center;
+}
