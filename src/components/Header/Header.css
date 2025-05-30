@@ -30,3 +30,14 @@
   height: 40px;
   cursor: pointer;
 }
+.logout-button {
+  background: none;
+  border: none;
+  color: #fd3470;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.logout-button:hover {
+  color: #000;
+}

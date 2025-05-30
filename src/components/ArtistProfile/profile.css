@@ -332,4 +332,25 @@ body {
   content: "⚠️";
   margin-right: 0.25rem;
 }
+
+.message-box {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  background-color: #f1eaed;
+  color: #fd3470;
+  font-weight: 500;
+  animation: fadeout 1s ease-out 4s forwards;
+  
+  /* Center horizontally */
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+
 /*
