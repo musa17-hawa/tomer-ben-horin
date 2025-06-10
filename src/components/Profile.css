@@ -1,0 +1,355 @@
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: #f9fafb;
+  margin: 0;
+  padding: 0;
+  color: #111827;
+}
+
+.profile-container {
+  display: flex;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  background: white;
+  padding: 2.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 1000px;
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .profile-form {
+    flex-direction: row;
+  }
+}
+
+.profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .profile-picture-section {
+    flex: 1;
+    border-right: 1px solid #e5e7eb;
+    padding-right: 2.5rem;
+    padding-bottom: 0;
+  }
+}
+
+.profile-picture-section h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #111827;
+}
+
+.profile-picture {
+  width: 100%;
+  height: 50%;
+  border-radius: 5px;
+  object-fit: cover;
+  background-color: #f3f4f6;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  border: 3px solid #ffffff;
+  transition: transform 0.2s ease;
+}
+
+.profile-picture:hover {
+  transform: scale(1.02);
+}
+
+.upload-label {
+  font-size: 0.75rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.upload-button {
+  display: inline-block;
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-weight: 500;
+  text-align: center;
+}
+
+.upload-button:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.profile-details-section {
+  flex: 2;
+}
+
+.profile-details-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #43202b;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.75rem;
+}
+
+.profile-details-section h2::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 1px;
+  width: 100%;
+  background-color: #080707;
+  border-radius: 2px;
+}
+
+.profile-details-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .profile-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.profile-details-grid label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.profile-field {
+  margin-bottom: 1rem;
+}
+
+.profile-field-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.required-marker {
+  color: #ef4444;
+  margin-left: 0.25rem;
+}
+
+.profile-details-grid input,
+.profile-details-grid textarea {
+  margin-top: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.profile-details-grid input:focus,
+.profile-details-grid textarea:focus {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+  outline: none;
+}
+
+.profile-details-grid textarea {
+  resize: none;
+  height: 70px;
+  overflow: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  background-color: #ffffff;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.actions {
+  margin-top: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.save-button {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+}
+
+.save-button:hover {
+  background-color: #4338ca;
+  transform: translateY(-1px);
+}
+
+.logout-button {
+  background-color: transparent;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.logout-button:hover {
+  background-color: #f3f4f6;
+  border-color: #9ca3af;
+  color: #4b5563;
+}
+
+.status-message {
+  margin-top: 1.25rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.status-success {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
+}
+
+.status-error {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+}
+
+.status-info {
+  background-color: #eff6ff;
+  color: #1e40af;
+  border-left: 4px solid #3b82f6;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+  font-size: 1rem;
+  color: #6b7280;
+}
+
+.loading::after {
+  content: "";
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 50%;
+  border-top-color: #4f46e5;
+  margin-left: 0.75rem;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.required {
+  color: red;
+  margin-left: 0.25rem;
+}
+
+.profile-label {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.875rem;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.label-text {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.field-error {
+  color: red;
+  font-size: 0.9em;
+  margin: 4px 0;
+}
+
+.field-error::before {
+  content: "⚠️";
+  margin-right: 0.25rem;
+}
+
+.message-box {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  background-color: #f1eaed;
+  color: #fd3470;
+  font-weight: 500;
+  animation: fadeout 1s ease-out 4s forwards;
+  display: inline-block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes fadeout {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}

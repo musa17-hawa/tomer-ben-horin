@@ -1,0 +1,59 @@
+.app-header {
+    width: 100%;
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f8f9fc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    direction: rtl;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    padding: 8px 18px;
+    border-radius: 20px;
+    transition: background-color 0.2s, color 0.2s;
+    background: #fde6ec;
+    margin-left: 8px;
+  }
+  
+  .nav-links a.active,
+  .nav-links a:hover {
+    background-color: #e42b60;
+    color: #fff;
+  }
+  
+  .app-logo {
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  .logout-button {
+    background: none;
+    border: none;
+    color: #fd3470;
+    cursor: pointer;
+    margin-right: 10px;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+  }
+  
+  .logout-button:hover {
+    color: #e42b60;
+  }
