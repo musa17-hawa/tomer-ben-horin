@@ -1,15 +1,13 @@
+// export default AdminProfile;
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
-import { auth, db, storage } from "../../firebase";
+import { useNavigate, useParams } from "react-router-dom";
+import { db } from "../../firebase";
 import { doc, updateDoc, onSnapshot } from "firebase/firestore";
-import { onAuthStateChanged, signOut } from "firebase/auth";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
-import "./Profile.css";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import "./profile-art.css";
 
 const MAX_IMAGE_SIZE_MB = 5;
 
@@ -25,33 +23,30 @@ const Profile = () => {
   const navigate = useNavigate();
   const profileRef = useRef(); // visible form
   const printRef = useRef(); // clean export
-  const { id } = useParams();
+  const { id } = useParams(); // use id param from route
 
   useEffect(() => {
-    const unsubscribeAuth = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        const docRef = doc(db, "users", user.uid);
-        const unsubscribeDoc = onSnapshot(docRef, (docSnap) => {
-          if (docSnap.exists()) {
-            setProfile(docSnap.data());
-            setMessage("");
-          } else {
-            setProfile(null);
-            setMessage("No profile found.");
-          }
-          setLoading(false);
-        });
-        return () => unsubscribeDoc();
+    if (!id) {
+      setMessage("No user ID specified.");
+      setLoading(false);
+      return;
+    }
+
+    const docRef = doc(db, "users", id);
+    const unsubscribe = onSnapshot(docRef, (docSnap) => {
+      if (docSnap.exists()) {
+        setProfile(docSnap.data());
+        setMessage("");
       } else {
         setProfile(null);
-        setMessage("Not logged in.");
-        setLoading(false);
+        setMessage("No profile found.");
       }
+      setLoading(false);
     });
-    return () => unsubscribeAuth();
-  }, []);
 
-  // Cleanup the previewImage URL object to avoid memory leaks
+    return () => unsubscribe();
+  }, [id]);
+
   useEffect(() => {
     return () => {
       if (previewImage) {
@@ -76,6 +71,7 @@ const Profile = () => {
       setMessage("");
     }
   };
+
   const uploadImageToImgBB = async (imageFile) => {
     const apiKey = "8f43d546efb93c05215267d303f475e7"; // Replace with your actual API key
     const formData = new FormData();
@@ -93,19 +89,6 @@ const Profile = () => {
     }
   };
 
-  // const handleImageUpload = async () => {
-  //   if (!imageFile) return profile?.image || "";
-  //   try {
-  //     const imageRef = ref(storage, `profile_images/${auth.currentUser.uid}`);
-  //     await uploadBytes(imageRef, imageFile);
-  //     const downloadURL = await getDownloadURL(imageRef);
-  //     return downloadURL;
-  //   } catch (error) {
-  //     console.error("Image upload failed:", error);
-  //     setMessage("Failed to upload image.");
-  //     return profile?.image || "";
-  //   }
-  // };
   const handleImageUpload = async () => {
     if (!imageFile) return profile?.image || "";
     try {
@@ -149,7 +132,7 @@ const Profile = () => {
     try {
       const imageUrl = await handleImageUpload();
       const updatedProfile = { ...profile, image: imageUrl };
-      const docRef = doc(db, "users", auth.currentUser.uid);
+      const docRef = doc(db, "users", id); // use id param here
       await updateDoc(docRef, updatedProfile);
       setMessage("Profile updated successfully");
       setTimeout(() => {
@@ -163,21 +146,12 @@ const Profile = () => {
     }
   };
 
-  // const handleLogout = async () => {
-  //   try {
-  //     await signOut(auth);
-  //     navigate("/");
-  //   } catch (error) {
-  //     setMessage("Error logging out.");
-  //   }
-  // };
-
   const handleExportPDF = async () => {
     const input = printRef.current;
     if (!input) return;
     try {
       const canvas = await html2canvas(input, {
-        scale: 3, // higher scale = better resolution
+        scale: 3,
         useCORS: true,
         backgroundColor: "#fff",
       });
@@ -187,7 +161,6 @@ const Profile = () => {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-      // Add image with some margin
       const margin = 10;
       pdf.addImage(
         imgData,
@@ -203,8 +176,9 @@ const Profile = () => {
       setMessage("Failed to export PDF.");
     }
   };
+
   const goToAdminDashboard = () => {
-    navigate("/admin-dashboard"); // Change this route if your dashboard route is different
+    navigate("/admin-dashboard");
   };
 
   if (loading) return <p>Loading...</p>;
@@ -311,7 +285,7 @@ const Profile = () => {
 
             <label htmlFor="place" className="profile-label">
               <span className="label-text">
-                אזור מגורים<span className="required-marker">*</span>
+                מקום מגורים<span className="required-marker">*</span>
               </span>
               {errors.place && <p className="field-error">{errors.place}</p>}
               <input
@@ -344,158 +318,69 @@ const Profile = () => {
             )}
           </div>
 
-          <div className="actions">
+          <div className="profile-actions">
             <button
-              className="save-button "
+              className="save-button"
               type="button"
               onClick={handleSave}
               disabled={isSaving}
             >
-              {isSaving ? "שומר..." : "שמור שינויים"}
+              {isSaving ? "שומר..." : "שמור פרטים"}
             </button>
-            {/* <button type="button" onClick={handleLogout}>Logout</button> */}
+
             <button
               className="pdf-button"
               type="button"
               onClick={handleExportPDF}
             >
-              Export PDF
-            </button>
-
-            {/* New button to navigate to Admin Dashboard */}
-            <button type="button" onClick={goToAdminDashboard}>
-              חזור לניהול אמנים
+              ייצא כ-PDF
             </button>
           </div>
 
-          {message && <p className="message">{message}</p>}
+          {message && <p className="form-message">{message}</p>}
         </div>
       </form>
 
-      {/* Hidden div for clean PDF export */}
+      {/* Hidden printable area */}
       <div
         ref={printRef}
         style={{
-          position: "fixed",
-          top: -9999,
-          left: -9999,
-          width: "210mm", // A4 width
-          padding: "20mm",
-          fontFamily: "'Arial', sans-serif",
+          position: "absolute",
+          left: "-9999px",
+          top: 0,
+          width: "210mm",
+          padding: "20px",
           backgroundColor: "#fff",
-          color: "#222",
-          boxSizing: "border-box",
         }}
+        dir="rtl"
       >
-        <div style={{ textAlign: "center", marginBottom: "20px" }}>
-          {profile.image && (
-            <img
-              src={profile.image}
-              alt="Profile"
-              style={{
-                width: 160,
-                height: 160,
-                borderRadius: "50%",
-                objectFit: "cover",
-                border: "3px solid #4a90e2",
-                marginBottom: "15px",
-              }}
-            />
-          )}
-          <h1 style={{ margin: 0, fontSize: "28px", fontWeight: "700" }}>
-            {profile.name}
-          </h1>
-        </div>
-
-        <section style={{ marginBottom: "15px" }}>
-          <h2
-            style={{
-              fontSize: "20px",
-              marginBottom: "6px",
-              borderBottom: "1px solid #ddd",
-              paddingBottom: "4px",
-            }}
-          >
-            Bio / ביו
-          </h2>
-          <p
-            style={{
-              fontSize: "16px",
-              lineHeight: "1.5",
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {profile.bio}
-          </p>
-        </section>
-
-        <section style={{ marginBottom: "15px" }}>
-          <h2
-            style={{
-              fontSize: "20px",
-              marginBottom: "6px",
-              borderBottom: "1px solid #ddd",
-              paddingBottom: "4px",
-            }}
-          >
-            תחום האומנות
-          </h2>
-          <p style={{ fontSize: "16px" }}>{profile.subject}</p>
-        </section>
-
+        <h1>{profile.name}</h1>
+        <img
+          src={profile.image || "https://via.placeholder.com/140"}
+          alt="Profile"
+          width={140}
+          height={140}
+          style={{ borderRadius: "50%" }}
+        />
+        <p>{profile.bio}</p>
+        <p>
+          <b>תחום האומנות:</b> {profile.subject}
+        </p>
         {profile.group && (
-          <section style={{ marginBottom: "15px" }}>
-            <h2
-              style={{
-                fontSize: "20px",
-                marginBottom: "6px",
-                borderBottom: "1px solid #ddd",
-                paddingBottom: "4px",
-              }}
-            >
-              קבוצת אמנים
-            </h2>
-            <p style={{ fontSize: "16px" }}>{profile.group}</p>
-          </section>
+          <p>
+            <b>קבוצת אמנים:</b> {profile.group}
+          </p>
         )}
-
-        <section style={{ marginBottom: "15px" }}>
-          <h2
-            style={{
-              fontSize: "20px",
-              marginBottom: "6px",
-              borderBottom: "1px solid #ddd",
-              paddingBottom: "4px",
-            }}
-          >
-            Email / אימייל
-          </h2>
-          <p style={{ fontSize: "16px" }}>{profile.email}</p>
-        </section>
-
-        <section style={{ marginBottom: "20px" }}>
-          <h2
-            style={{
-              fontSize: "20px",
-              marginBottom: "6px",
-              borderBottom: "1px solid #ddd",
-              paddingBottom: "4px",
-            }}
-          >
-            אזור מגורים
-          </h2>
-          <p style={{ fontSize: "16px" }}>{profile.place}</p>
-        </section>
-
-        {profile.link && (
-          <div style={{ textAlign: "center", marginTop: "30px" }}>
-            <h2 style={{ fontSize: "18px", marginBottom: "12px" }}>QR Code</h2>
-            <QRCodeCanvas value={profile.link} size={150} />
-            <p style={{ marginTop: "10px", fontSize: "14px", color: "#555" }}>
-              {profile.link}
-            </p>
-          </div>
-        )}
+        <p>
+          <b>אימייל:</b> {profile.email}
+        </p>
+        <p>
+          <b>מקום מגורים:</b> {profile.place}
+        </p>
+        <QRCodeCanvas
+          value={`https://art-museum-1.vercel.app/profile/${id}`}
+          size={128}
+        />
       </div>
     </div>
   );
