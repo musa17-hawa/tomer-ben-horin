@@ -4,6 +4,7 @@ import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
+<<<<<<< HEAD
 // Firebase configuration using .env variables
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -14,6 +15,8 @@ const firebaseConfig = {
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
+=======
+>>>>>>> edb6ec50ba66b2c3306f8b6e52110db4aa5892f3
 
 // Initialize Firebase
 let app, analytics, auth, db, storage;
