@@ -7,6 +7,7 @@ import { setupUserInFirestore } from "./useFirestoreUser"; // 👈 Add this impo
 import AdminDashboard from "./components/ArtistsCards-profile/art-cards";
 import "./App.css";
 import AdminProfile from "./components/ArtistsCards-profile/profileAdmin";
+import ImportArtists from "./importArtits"; // Import the component if needed
 
 const App = () => {
   useEffect(() => {
@@ -30,8 +31,9 @@ const App = () => {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
-          <Route path="/Admiprofile/:id" element={<AdminProfile />} />{" "}
-          {/* ✅ Add this */}
+          <Route path="/Admiprofile/:id" element={<AdminProfile />} />
+          <Route path="/import-artists" element={<ImportArtists />} />{" "}
+          {/* ✅ NEW */}
         </Routes>
       </div>
     </Router>
