@@ -1,0 +1,190 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&display=swap');
+
+body, #root {
+  direction: rtl;
+  font-family: Assistant, sans-serif;
+  background-image: url('https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+.main-navbar {
+  background-color: white;
+  width: 100vw;
+  padding: 0;
+  border-bottom: 1px
+  box box-shadow 0 2px 8px rgba(0, 0, 0, 0.05);
+  direction: rtl;
+  position: relative;
+}
+
+.navbar-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 10px 30px;
+}
+
+.navbar-logo-link {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.nav-links {
+  display: flex;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  font-size: 22px;
+  font-weight: 600;
+  color: #000;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+  color: #e91e63;
+}
+
+.profile-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-icon {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+}
+
+.logout-button,
+.exhibition-btn {
+  background-color: #ec407a; /* pink background */
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.logout-button:hover,
+.exhibition-btn:hover {
+  background-color: #d81b60; /* darker pink on hover */
+}
+.register-button {
+  background-color: #ec407a; /* pink */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.register-button:hover {
+  background-color: #d81b60; /* darker pink on hover */
+}
+
+/* Welcome title */
+.welcome-title {
+  text-align: center;
+  color: #df3470;
+  font-size: 28px;
+  margin: 40px 0 20px;
+}
+
+/* Exhibition grid */
+.exhibition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px 40px;
+}
+
+/* Exhibition card */
+.exhibition-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.exhibition-title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+.exhibition-date {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.exhibition-status {
+  display: inline-block;
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.exhibition-btn {
+  background-color: white;
+  color: #e91e63;
+  border: 2px solid #e91e63;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.exhibition-btn:hover {
+  background-color: #e91e63;
+  color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar-flex {
+    flex-direction: column-reverse;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .profile-wrapper {
+    align-self: flex-end;
+  }
+
+  .nav-links {
+    justify-content: center;
+  }
+}

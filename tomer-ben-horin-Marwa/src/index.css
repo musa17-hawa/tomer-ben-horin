@@ -24,20 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-<<<<<<< HEAD
-  padding: 0;
-  background-image: url('./Components/assets/paper-texture.webp');
-  background-repeat: repeat;
-  background-size: cover;
-  background-color: #f9f9f9;
-  direction: rtl;
-  font-family: 'Heebo', sans-serif;
-=======
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
->>>>>>> cfc1b5c (commit)
 }
 
 h1 {
