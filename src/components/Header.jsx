@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import "./Header.css";
+<<<<<<< HEAD
 import { auth } from "../firebase/config";
+=======
+import { auth } from "../../firebase";
+>>>>>>> d50b4b1 (committs)
 import { signOut } from "firebase/auth";
 import { MdLogout } from "react-icons/md";
 
@@ -9,7 +13,10 @@ const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const isSignInPage = location.pathname === "/";
+<<<<<<< HEAD
   const isRegisterArtworkPage = location.pathname === "/register-artwork";
+=======
+>>>>>>> d50b4b1 (committs)
   const [message, setMessage] = useState("");
 
   const handleLogout = async () => {
@@ -23,6 +30,7 @@ const Header = () => {
 
   return (
     <header className="app-header" dir="rtl">
+<<<<<<< HEAD
       <div className="header-top" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'relative' }}>
         {/* Right: Logo */}
         <div className="logo">
@@ -79,6 +87,38 @@ const Header = () => {
           )}
         </div>
       </div>
+=======
+      <div className="header-left">
+        <img
+          src="https://amutatbh.com/wp-content/uploads/2021/03/logo-new.svg"
+          alt="Logo"
+          className="app-logo"
+          onClick={() => navigate("/dashboard")}
+          style={{ cursor: "pointer" }}
+        />
+      </div>
+      {!isSignInPage && (
+        <nav className="nav-links">
+          <Link to="/dashboard" className={location.pathname === "/dashboard" ? "active" : ""}>
+            תערוכות
+          </Link>
+          <Link to="/artists" className={location.pathname === "/artists" ? "active" : ""}>
+            אמנים
+          </Link>
+          <Link to="/profile" className={location.pathname === "/profile" ? "active" : ""}>
+            פרופיל
+          </Link>
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="logout-button"
+            title="התנתק"
+          >
+            <MdLogout size={24} />
+          </button>
+        </nav>
+      )}
+>>>>>>> d50b4b1 (committs)
     </header>
   );
 };

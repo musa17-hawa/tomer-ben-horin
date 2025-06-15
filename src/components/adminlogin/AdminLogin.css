@@ -1,0 +1,170 @@
+body, #root {
+    min-height: 100vh;
+    min-width: 100vw;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    direction: rtl;
+    font-family: Assistant, sans-serif;
+  }
+  
+  /* Main layout */
+  .login-box {
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
+      margin: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+      width: 720px;
+      max-width: 95vw;
+      height: 600px;
+      max-height: 95vh;
+      background: white;
+    }
+    
+    /* Left: Logo area */
+    .side-container {
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(to bottom, #f8a5c2, #fff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+      padding: 0px;
+    }
+    
+    /* White container behind logo */
+    .logo-wrapper {
+      background: white;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    /* Logo image itself */
+    .logo-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+    
+    /* Right: Form container */
+    .container {
+      width: 55%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #fff;
+      padding: 30px;
+      box-sizing: border-box;
+      height: 100%;
+    }
+    
+    /* Header (icon + title) */
+    .header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 60px;
+    }
+    
+    .avatar-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: #eaeaea;
+      padding: 10px;
+      object-fit: cover;
+      box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .text {
+      color: deeppink;
+      font-size: 36px;
+      font-weight: 700;
+    }
+    
+    .underline {
+      width: 60px;
+      height: 4px;
+      background: deeppink;
+      border-radius: 5px;
+    }
+  
+    
+    /* Input group */
+    .inputs {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    
+    .input {
+      display: flex;
+      align-items: center;
+      background: #f1f1f1;
+      border-radius: 6px;
+      padding: 10px 15px;
+      height: 45px;
+    }
+    
+    .input img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    
+    .input input {
+      flex: 1;
+      border: none;
+      background: none;
+      outline: none;
+      font-size: 14px;
+    }
+    
+    /* Button */
+    .submit-container {
+      margin-top: 60px;
+      text-align: center;
+    }
+    
+    .submit {
+      background: deeppink;
+      color: white;
+      width: 100%;
+      padding: 10px 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      border: none;
+      font-size: 14px;
+    }
+  
+    .register-text {
+      margin-top: 12px;
+      font-size: 13px;
+      color: #666;
+      text-align: center;
+    }
+    
+    .register-text a {
+      color: deeppink;
+      font-weight: 600;
+      text-decoration: none;
+      transition: 0.2s ease-in-out;
+    }
+    
+    .register-text a:hover {
+      text-decoration: underline;
+    } 

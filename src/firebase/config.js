@@ -3,10 +3,15 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
+<<<<<<< HEAD
 import { collection, addDoc } from 'firebase/firestore';
 import { Timestamp } from 'firebase/firestore';
 
 // Your web app's Firebase configuration
+=======
+
+// Your web app's Firebase configuration (updated)
+>>>>>>> d50b4b1 (committs)
 const firebaseConfig = {
   apiKey: "AIzaSyAX9UoRVd27t-A1vV4kaMyqh2KPtTZbrmo",
   authDomain: "signin-350d8.firebaseapp.com",
@@ -24,6 +29,7 @@ const storage = getStorage(app);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
+<<<<<<< HEAD
 export { db, storage, analytics, auth, uploadImageToImgBB };
 
 async function uploadImageToImgBB(file) {
@@ -84,3 +90,6 @@ async function handleImageUpload() {
   if (!selectedFile) return profile.image; // or return null if you want to force a new image
   return await uploadImageToImgBB(selectedFile);
 } 
+=======
+export { db, storage, analytics, auth }; 
+>>>>>>> d50b4b1 (committs)

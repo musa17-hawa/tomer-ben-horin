@@ -25,6 +25,7 @@ a:hover {
 body {
   margin: 0;
 <<<<<<< HEAD
+<<<<<<< HEAD
   padding: 0;
   background-image: url('./Components/assets/paper-texture.webp');
   background-repeat: repeat;
@@ -38,6 +39,13 @@ body {
   min-width: 320px;
   min-height: 100vh;
 >>>>>>> cfc1b5c (commit)
+=======
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+>>>>>>> d50b4b1 (committs)
 }
 
 h1 {

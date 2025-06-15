@@ -1,0 +1,144 @@
+.details-modal-backdrop {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.18);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.details-modal-container {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.13);
+  padding: 40px;
+  min-width: 500px;
+  max-width: 900px;
+  max-height: 95vh;
+  overflow-y: auto;
+  direction: rtl;
+  text-align: right;
+  position: relative;
+}
+.details-modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 25px;
+}
+.details-modal-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 25px;
+}
+.details-modal-tabs button {
+  background: #f5f5f5;
+  border: none;
+  border-radius: 8px 8px 0 0;
+  padding: 10px 24px;
+  font-size: 1rem;
+  color: #222;
+  cursor: pointer;
+  font-weight: 500;
+}
+.details-modal-tabs button.active {
+  background: #eafaf1;
+  color: #e42b60;
+  font-weight: bold;
+}
+.details-modal-content, .artworks-tab-content {
+  margin-top: 10px;
+}
+.details-row {
+  display: flex;
+  gap: 25px;
+}
+.details-field {
+  flex: 1;
+  margin-bottom: 20px;
+}
+.details-field label {
+  font-size: 1.1rem;
+  color: #222;
+  font-weight: 500;
+}
+.artworks-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+.artworks-search {
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  width: 260px;
+  outline: none;
+}
+.artworks-add-btn {
+  background: #e42b60;
+  color: #fff;
+  border: none;
+  border-radius: 18px;
+  padding: 10px 28px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+.artworks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 32px;
+}
+.artwork-card {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 18px 12px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  font-family: Assistant, sans-serif;
+}
+.artwork-image {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 12px;
+}
+.artwork-info {
+  margin-bottom: 10px;
+}
+.artwork-name {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #222;
+}
+.artwork-artist {
+  font-size: 1rem;
+  color: #444;
+}
+.artwork-price {
+  font-size: 1rem;
+  color: #e42b60;
+  font-weight: bold;
+}
+.artwork-actions {
+  display: flex;
+  gap: 8px;
+}
+.artwork-edit {
+  background: #fff;
+  color: #e42b60;
+  border: 1px solid #e42b60;
+  border-radius: 12px;
+  padding: 6px 18px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+}
+.artwork-edit:hover {
+  background: #fde6ec;
+}

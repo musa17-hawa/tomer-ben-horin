@@ -7,7 +7,10 @@ import {
 } from '../../services/exhibitionService';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/config';
+<<<<<<< HEAD
 import { uploadImageToImgBB } from '../../firebase/config';
+=======
+>>>>>>> d50b4b1 (committs)
 
 const AdminExhibitions = () => {
   const [exhibitions, setExhibitions] = useState([]);
@@ -51,7 +54,13 @@ const AdminExhibitions = () => {
 
   const uploadImage = async (file) => {
     if (!file) return null;
+<<<<<<< HEAD
     return await uploadImageToImgBB(file);
+=======
+    const storageRef = ref(storage, `exhibitions/${Date.now()}_${file.name}`);
+    await uploadBytes(storageRef, file);
+    return await getDownloadURL(storageRef);
+>>>>>>> d50b4b1 (committs)
   };
 
   const handleSubmit = async (e) => {

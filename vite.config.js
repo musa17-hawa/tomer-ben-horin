@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
@@ -12,6 +13,8 @@ export default defineConfig({
   },
 });
 =======
+=======
+>>>>>>> d50b4b1 (committs)
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -19,4 +22,7 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
 })
+<<<<<<< HEAD
 >>>>>>> cfc1b5c (commit)
+=======
+>>>>>>> d50b4b1 (committs)
