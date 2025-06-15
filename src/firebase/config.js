@@ -1,17 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, collection, addDoc, Timestamp } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth } from 'firebase/auth';
-<<<<<<< HEAD
-import { collection, addDoc } from 'firebase/firestore';
-import { Timestamp } from 'firebase/firestore';
 
-// Your web app's Firebase configuration
-=======
-
-// Your web app's Firebase configuration (updated)
->>>>>>> d50b4b1 (committs)
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyAX9UoRVd27t-A1vV4kaMyqh2KPtTZbrmo",
   authDomain: "signin-350d8.firebaseapp.com",
@@ -29,11 +22,9 @@ const storage = getStorage(app);
 const analytics = getAnalytics(app);
 const auth = getAuth(app);
 
-<<<<<<< HEAD
-export { db, storage, analytics, auth, uploadImageToImgBB };
-
+// ImgBB Upload Function
 async function uploadImageToImgBB(file) {
-  const apiKey = "c80f72adbb0ff59880276ec1d9ae8dbf"; // User's ImgBB API key
+  const apiKey = "c80f72adbb0ff59880276ec1d9ae8dbf";
   const formData = new FormData();
   formData.append("image", file);
 
@@ -44,52 +35,16 @@ async function uploadImageToImgBB(file) {
 
   const data = await response.json();
   if (data.success) {
-    return data.data.url; // This is the direct image URL
+    return data.data.url;
   } else {
     throw new Error("Image upload failed");
   }
 }
 
-async function handleSubmit(e) {
-  e.preventDefault();
-  setError('');
-  setSuccess(false);
-  if (!fullName || !image || !description || !size || !artworkName) {
-    setError('אנא מלא את כל השדות החובה.');
-    return;
-  }
-  setLoading(true);
-  try {
-    // Upload image to ImgBB
-    let uploadedImageUrl = '';
-    if (image) {
-      uploadedImageUrl = await uploadImageToImgBB(image);
-    }
-    // Save registration to Firestore
-    await addDoc(collection(db, 'registrations'), {
-      exhibitionId,
-      fullName,
-      imageUrl: uploadedImageUrl,
-      description,
-      size,
-      artworkName,
-      price: price.trim() === '' ? 'please contact artist' : price,
-      createdAt: Timestamp.now(),
-    });
-    setSuccess(true);
-    // ...reset form fields...
-  } catch (err) {
-    setError('אירעה שגיאה בשליחת הטופס.');
-    console.error(err);
-  } finally {
-    setLoading(false);
-  }
+// Optional utility functions (keep only if needed)
+async function handleImageUpload(selectedFile, profile) {
+  if (!selectedFile) return profile.image;
+  return await uploadImageToImgBB(selectedFile);
 }
 
-async function handleImageUpload() {
-  if (!selectedFile) return profile.image; // or return null if you want to force a new image
-  return await uploadImageToImgBB(selectedFile);
-} 
-=======
-export { db, storage, analytics, auth }; 
->>>>>>> d50b4b1 (committs)
+export { db, storage, analytics, auth, uploadImageToImgBB };

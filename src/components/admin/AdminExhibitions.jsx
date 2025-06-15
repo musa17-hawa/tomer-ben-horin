@@ -7,10 +7,8 @@ import {
 } from '../../services/exhibitionService';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/config';
-<<<<<<< HEAD
+
 import { uploadImageToImgBB } from '../../firebase/config';
-=======
->>>>>>> d50b4b1 (committs)
 
 const AdminExhibitions = () => {
   const [exhibitions, setExhibitions] = useState([]);

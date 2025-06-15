@@ -51,7 +51,7 @@ const AdminDashboard = () => {
         <div className="dashboard-nav">
           <button
             className="dashboard-btn"
-            onClick={() => navigate('/dashboard')}
+            onClick={() => navigate('/user-dashboard')}
           >
             חזור לתערוכות
           </button>
