@@ -1,43 +1,164 @@
 .app-header {
-  width: 100%;
-  padding: 16px 32px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #f8f9fc;
+  position: relative;
+  height: 64px;
+  background: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  direction: rtl;
+  font-family: Arial, Helvetica, sans-serif;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  padding: 0 80px;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.logout-button {
+  position: absolute;
+  top: 50%;
+  left: 16px;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #fd3470;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  user-select: none;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  z-index: 10;
+}
+
+.logout-button:hover,
+.logout-button:focus {
+  color: white;
+  background-color: #fd3470;
+  outline: none;
+}
+
+.app-logo {
+  position: absolute;
+  top: 50%;
+  right: 16px;
+  transform: translateY(-50%);
+  height: 48px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  user-select: none;
+  z-index: 10;
+}
+
+.app-logo:hover,
+.app-logo:focus {
+  transform: translateY(-50%) scale(1.05);
+  outline: none;
 }
 
 .nav-links {
   display: flex;
-  gap: 24px;
+  gap: 2.5rem;
+  font-weight: 500;
+  color: #323232;
+  justify-content: center;
+  flex-grow: 1;
+  max-width: 900px;
+  user-select: text;
+  white-space: nowrap;
 }
 
 .nav-links a {
+  position: relative;
+  color: #323232;
   text-decoration: none;
-  color: #333;
-  font-weight: 500;
-  padding: 8px 12px;
+  padding: 4px 0;
+  transition: color 0.2s;
   border-radius: 4px;
-  transition: background-color 0.2s ease;
 }
 
-.nav-links a:hover {
-  background-color: #e0e0e0;
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 2px;
+  background: #fd3470;
+  transition: width 0.3s ease;
 }
 
-.app-logo {
-  height: 40px;
-  cursor: pointer;
-}
-.logout-button {
-  background: none;
-  border: none;
+.nav-links a:hover,
+.nav-links a:focus {
   color: #fd3470;
-  cursor: pointer;
-  margin-right: 10px;
+  outline: none;
 }
 
-.logout-button:hover {
-  color: #000;
+.nav-links a:hover::after,
+.nav-links a:focus::after {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    height: 56px;
+    padding: 0 60px;
+  }
+  .logout-button {
+    left: 12px;
+    font-size: 0.9rem;
+    padding: 5px 10px;
+  }
+  .app-logo {
+    right: 12px;
+    height: 40px;
+  }
+  .nav-links {
+    gap: 1.5rem;
+    max-width: 100%;
+  }
+  .nav-links a {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app-header {
+    height: 50px;
+    padding: 0 50px;
+  }
+  .logout-button {
+    left: 10px;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+  }
+  .app-logo {
+    right: 10px;
+    height: 36px;
+  }
+  .nav-links {
+    gap: 1rem;
+  }
+  .nav-links a {
+    font-size: 0.85rem;
+  }
+}
+/* Slight underline below active nav link */
+.nav-links a.active {
+  position: relative;
+}
+
+.nav-links a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px; /* slightly below the text */
+  width: 40px; /* small underline */
+  height: 2px; /* thickness of underline */
+  background-color: #fd3470;
+  border-radius: 1px;
 }

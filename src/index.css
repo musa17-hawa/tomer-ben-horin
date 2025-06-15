@@ -25,3 +25,15 @@ a {
   border: none;
   background: none;
 } */
+/* Make the entire app RTL, set background and base font */
+body,
+#root {
+  direction: rtl;
+  font-family: Assistant, sans-serif;
+  background-image: url("https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
