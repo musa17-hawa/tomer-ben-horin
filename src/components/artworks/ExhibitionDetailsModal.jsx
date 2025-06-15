@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './ExhibitionDetailsModal.css';
+import '../exhibitions/ExhibitionDetailsModal.css';
 import ArtworkModal from './ArtworkModal';
 
 function ExhibitionDetailsModal({ isOpen, onClose, exhibition, onUpdateArtworks }) {
@@ -94,7 +94,7 @@ function ExhibitionDetailsModal({ isOpen, onClose, exhibition, onUpdateArtworks 
             <div className="artworks-grid">
               {filteredArtworks.map((art, idx) => (
                 <div className="artwork-card" key={idx}>
-                  <img src={art.image} alt={art.name} className="artwork-image" />
+                  <img src={art.imageUrl} alt={art.name} className="artwork-image" />
                   <div className="artwork-info">
                     <div className="artwork-name">{art.name}</div>
                     <div className="artwork-artist">{art.artist}</div>

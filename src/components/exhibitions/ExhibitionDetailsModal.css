@@ -11,9 +11,9 @@
   background: #fff;
   border-radius: 16px;
   box-shadow: 0 4px 32px rgba(0,0,0,0.13);
-  padding: 32px 28px 24px 28px;
-  min-width: 420px;
-  max-width: 98vw;
+  padding: 40px;
+  min-width: 500px;
+  max-width: 900px;
   max-height: 95vh;
   overflow-y: auto;
   direction: rtl;
@@ -21,14 +21,14 @@
   position: relative;
 }
 .details-modal-title {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 18px;
+  margin-bottom: 25px;
 }
 .details-modal-tabs {
   display: flex;
-  gap: 8px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 25px;
 }
 .details-modal-tabs button {
   background: #f5f5f5;
@@ -50,14 +50,14 @@
 }
 .details-row {
   display: flex;
-  gap: 18px;
+  gap: 25px;
 }
 .details-field {
   flex: 1;
-  margin-bottom: 12px;
+  margin-bottom: 20px;
 }
 .details-field label {
-  font-size: 1rem;
+  font-size: 1.1rem;
   color: #222;
   font-weight: 500;
 }
