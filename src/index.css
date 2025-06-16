@@ -25,14 +25,16 @@ a:hover {
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Heebo', sans-serif;
+  font-family: "Heebo", sans-serif;
   direction: rtl;
-  background-image: url('https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg');
+  background-image: url("https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 
   display: block; /* remove global centering */
 }

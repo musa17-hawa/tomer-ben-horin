@@ -24,4 +24,4 @@ const ArtistDashboard = () => {
   );
 };
 
-export default ArtistDashboard; 
+export default ArtistDashboard;
