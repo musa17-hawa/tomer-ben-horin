@@ -1,0 +1,128 @@
+.login-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  /* ✅ Layout: logo on the right, form on the left */
+  .login-box {
+    display: flex;
+    flex-direction: row; /* <-- fixed: do NOT reverse */
+    direction: rtl; /* Hebrew alignment only */
+    width: 720px;
+    height: 600px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* RIGHT: logo */
+  .side-container {
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(to bottom, #f8a5c2, #fff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-wrapper {
+    background: white;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .logo-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  /* LEFT: form */
+  .container {
+    width: 55%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: #fff;
+    padding: 30px;
+    box-sizing: border-box;
+    height: 100%;
+  }
+  
+  .header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 60px;
+  }
+  
+  .text {
+    color: deeppink;
+    font-size: 36px;
+    font-weight: 700;
+  }
+  
+  .underline {
+    width: 60px;
+    height: 4px;
+    background: deeppink;
+    border-radius: 5px;
+  }
+  
+  .inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .input {
+    display: flex;
+    align-items: center;
+    background: #f1f1f1;
+    border-radius: 6px;
+    padding: 10px 15px;
+    height: 45px;
+  }
+  
+  .input input {
+    flex: 1;
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 14px;
+    text-align: right;
+  }
+  
+  .submit-container {
+    margin-top: 60px;
+    text-align: center;
+  }
+  
+  .submit {
+    background: deeppink;
+    color: white;
+    width: 100%;
+    padding: 10px 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    border: none;
+    font-size: 14px;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 14px;
+  }
+  
