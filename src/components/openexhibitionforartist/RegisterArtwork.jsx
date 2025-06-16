@@ -136,12 +136,11 @@ const RegisterArtwork = () => {
         </label>
 
         <label>
-          תיאור היצירה*:
+          תיאור היצירה:
           <input
             type="text"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            required
           />
         </label>
 
