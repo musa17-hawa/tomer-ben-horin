@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, uploadImageToImgBB } from "../../firebase/config";
-import { collection, addDoc, doc, getDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import "./RegisterArtwork.css";
 
 function useQuery() {
@@ -69,7 +76,6 @@ const RegisterArtwork = () => {
 
     try {
       setLoading(true);
-
       const user = auth.currentUser;
       if (!user) throw new Error("User not logged in");
 
@@ -84,11 +90,19 @@ const RegisterArtwork = () => {
         ? exhibitionSnap.data().title
         : "Untitled";
 
-      const regRef = collection(db, "users", user.uid, "registrations");
+      // Ensure registration document exists
+      const registrationRef = doc(
+        db,
+        "users",
+        user.uid,
+        "registrations",
+        exhibitionId
+      );
+      await setDoc(registrationRef, { exhibitionTitle }, { merge: true });
 
-      await addDoc(regRef, {
-        exhibitionId,
-        exhibitionTitle,
+      // Add artwork under this registration
+      const artworkRef = collection(registrationRef, "artworks");
+      await addDoc(artworkRef, {
         artworkName,
         description,
         imageUrl,

@@ -1,0 +1,99 @@
+/* AdminArtworksReview.css */
+
+.artworks-review-container {
+  padding: 2rem;
+  font-family: "Assistant", sans-serif;
+  max-width: 1200px;
+  margin: auto;
+  direction: rtl;
+}
+
+.artworks-review-container h2 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #2d2d2d;
+}
+
+.artwork-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.artwork-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+
+.artwork-image {
+  width: 100%;
+  max-height: 300px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.artwork-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+.artwork-info h3 {
+  font-size: 1.4rem;
+  color: #111;
+  margin-bottom: 0.5rem;
+}
+
+.approve-button {
+  margin-top: 1rem;
+  background-color: #1bbf83;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  align-self: flex-start;
+}
+
+.approve-button:hover {
+  background-color: #169a6c;
+}
+
+.approved-badge {
+  margin-top: 1rem;
+  color: #1bbf83;
+  font-weight: bold;
+  font-size: 1.1rem;
+  align-self: flex-start;
+  background-color: #e6f7f2;
+  padding: 0.4rem 1rem;
+  border-radius: 12px;
+}
+
+@media (min-width: 768px) {
+  .artwork-card {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  .artwork-image {
+    width: 40%;
+    max-height: 100%;
+  }
+
+  .artwork-info {
+    width: 60%;
+  }
+}
