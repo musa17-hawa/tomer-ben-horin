@@ -11,6 +11,7 @@ import Profile from "./Components/artists/profileAdmin";
 import AdminLogin from "./Components/adminlogin/AdminLogin";
 import ArtistDashboard from "./Components/artistDashboard/ArtistDashboard";
 import AdminArtworksReview from "./Components/exhibitions/AdminArtworksReview";
+import GalleryExhibitions from "./Components/galleries/GalleryExhibitions";
 
 function App() {
   return (
@@ -37,6 +38,12 @@ function App() {
         <Route
           path="/admin-artworks-review"
           element={<AdminArtworksReview />}
+        />
+
+        {/* Gallery route */}
+        <Route
+          path="/gallery/:galleryId/exhibitions"
+          element={<GalleryExhibitions />}
         />
 
         {/* Catch-all fallback route */}
