@@ -1,7 +1,7 @@
 .card-root {
   background: #fff;
   border-radius: 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.07);
   padding: 24px 20px 20px 20px;
   display: flex;
   flex-direction: column;
@@ -65,6 +65,7 @@
   width: 100%;
   justify-content: flex-end;
   margin-top: 16px;
+  align-items: center;
 }
 
 .card-btn {
@@ -79,7 +80,9 @@
   margin-top: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
+  height: 40px;
 }
 .card-btn.edit {
   font-weight: bold;
@@ -108,7 +111,7 @@
   height: 40px;
   min-width: 40px;
   min-height: 40px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,4 +165,4 @@
 .desc-tooltip-icon:focus .desc-tooltip,
 .desc-tooltip-icon:hover .desc-tooltip {
   display: block;
-} 
+}

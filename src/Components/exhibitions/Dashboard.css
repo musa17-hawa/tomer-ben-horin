@@ -52,6 +52,10 @@ body,
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
     transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .dashboard-btn.admin {
   font-weight: bold;
@@ -61,13 +65,14 @@ body,
   color: #fff;
   border: none;
   border-radius: 24px;
-  padding: 14px 32px;
-  font-size: 1.1rem;
+  padding: 10px 28px;
+  font-size: 1rem;
   font-weight: bold;
   box-shadow: 0 2px 8px rgba(228, 43, 96, 0.18);
   transition: background 0.2s, box-shadow 0.2s;
   margin-right: 0;
   margin-left: 0;
+  height: 44px;
 }
 .dashboard-btn:hover,
 .dashboard-btn.add-exhibition:hover {
@@ -102,33 +107,41 @@ body,
   align-items: center;
   width: 100%;
   max-width: 320px;
+  margin-top: 24px;
 }
 .dashboard-search {
-  padding-right: 38px;
-  padding-left: 18px;
-  border: 1px solid #ddd;
-  border-radius: 20px;
-  font-size: 1rem;
+  display: block;
   width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  font-size: 1rem;
+  text-align: right;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  height: 44px;
+  box-sizing: border-box;
   outline: none;
   direction: rtl;
-  text-align: right;
-  transition: border 0.2s;
 }
 .dashboard-search:focus {
-  border: 1.5px solid #e42b60;
+  outline: none;
+  border-color: #fd3470;
+  box-shadow: 0 0 0 3px rgba(228, 43, 96, 0.2);
 }
 .dashboard-search-icon {
   position: absolute;
-  right: 14px;
+  right: 1rem;
+  top: 28%;
+  transform: translateY(-50%);
   color: #e42b60;
   font-size: 1.1em;
   pointer-events: none;
+  z-index: 10;
 }
 .dashboard-status-dropdown {
   border: 1.5px solid #e42b60;
   border-radius: 20px;
-  padding: 10px 24px 10px 18px;
+  padding: 0 24px 0 18px;
   font-size: 1rem;
   outline: none;
   background: #fff;
@@ -138,6 +151,10 @@ body,
   cursor: pointer;
   margin-right: 0.5rem;
   box-shadow: 0 2px 8px rgba(228, 43, 96, 0.07);
+  height: 44px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 .dashboard-status-dropdown:focus,
 .dashboard-status-dropdown:hover {
@@ -147,9 +164,11 @@ body,
 
 .dashboard-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 32px;
   padding: 40px;
+  max-width: 1400px;
+  margin: 60px auto 0 auto;
 }
 
 .dashboard-pagination {
@@ -176,6 +195,15 @@ body,
   color: #fff;
 }
 
+@media (max-width: 1200px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 32px;
+    margin-top: 40px;
+  }
+}
+
 @media (max-width: 900px) {
   .dashboard-header,
   .dashboard-actions {
@@ -184,12 +212,22 @@ body,
     padding: 16px;
   }
   .dashboard-cards {
+    grid-template-columns: 1fr;
     padding: 16px;
     gap: 16px;
+    margin-top: 20px;
   }
   .dashboard-btn.add-exhibition {
     right: 16px;
     bottom: 16px;
     padding: 10px 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-cards {
+    padding: 12px;
+    gap: 12px;
+    margin-top: 20px;
   }
 }

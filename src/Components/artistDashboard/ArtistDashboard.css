@@ -1,38 +1,9 @@
-/* .artist-dashboard {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-}
-
-.artist-dashboard-content {
-  flex: 1;
-  padding: 2rem;
-  margin-top: 64px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 768px) {
-  .artist-dashboard-content {
-    padding: 1rem;
-    margin-top: 56px;
-  }
-}
-
-@media (max-width: 480px) {
-  .artist-dashboard-content {
-    padding: 0.75rem;
-    margin-top: 50px;
-  }
-} */
-/* src/components/artistDashboard/opend.css */
-
 /* Make the root only vertically padded so cards can hit the sides */
 .dashboard-root {
   width: 100%;
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 2rem 0; /* top/bottom only, no side padding */
+  padding: 2rem 0;
   margin-right: 50px;
 }
 
@@ -48,6 +19,8 @@
   font-size: 1rem;
   text-align: right;
   transition: border-color 0.2s, box-shadow 0.2s;
+  height: 44px;
+  box-sizing: border-box;
 }
 .dashboard-search:focus {
   outline: none;
@@ -55,29 +28,19 @@
   box-shadow: 0 0 0 3px rgba(228, 43, 96, 0.2);
 }
 
-/* Lay out cards in a right-to-left flex row, wrapping as needed */
-/* .dashboard-cards {
-    display: flex;
-    flex-direction: row-reverse; /* start placing at the right edge */
-/* flex-wrap: wrap;
-    gap: 2rem;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  } */
+/* Updated grid layout for 3 cards per row */
 .dashboard-cards {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start; /* wrapped rows start at the top */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
-  margin: 0;
-  padding: 0;
+  margin: 60px auto 0 auto;
+  padding: 0 2rem;
+  max-width: 1400px;
   width: 100%;
 }
 
-/* Fixed-width cards so they stack vertically from the right */
+/* Fixed-width cards with proper styling */
 .exhibition-card {
-  width: 260px;
   background: #fff;
   border-radius: 1rem;
   overflow: hidden;
@@ -131,14 +94,39 @@
   font-weight: 500;
   cursor: pointer;
   transition: background 0.2s;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .exhibition-btn:hover {
   background: #c81f4a;
 }
 
-/* On small screens, center the cards instead */
+/* Responsive design */
+@media (max-width: 1200px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 0 1rem;
+    margin-top: 40px;
+  }
+}
+
 @media (max-width: 768px) {
   .dashboard-cards {
-    justify-content: center;
+    grid-template-columns: 1fr;
+    padding: 0 1rem;
+    margin-top: 20px;
+  }
+  .dashboard-root {
+    margin-right: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-cards {
+    gap: 1rem;
+    padding: 0 0.5rem;
+    margin-top: 20px;
   }
 }
