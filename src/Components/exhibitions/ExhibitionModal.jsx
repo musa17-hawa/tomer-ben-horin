@@ -20,7 +20,7 @@ function ExhibitionModal({ isOpen, onClose, onSave }) {
     image: null,
     artists: [],
     artistSearch: '',
-    status: 'upcoming',
+    status: 'open',
     artworks: [],
     imageUrl: '',
   });
@@ -112,9 +112,8 @@ function ExhibitionModal({ isOpen, onClose, onSave }) {
               <div className="modal-field">
                 <label>סטטוס</label>
                 <select name="status" value={form.status} onChange={handleChange} required>
-                  <option value="upcoming">מתקרב</option>
-                  <option value="ongoing">פעיל</option>
-                  <option value="past">הסתיים</option>
+                  <option value="open">פתוחה</option>
+                  <option value="closed">סגורה</option>
                 </select>
               </div>
             </div>
@@ -209,4 +208,4 @@ function ExhibitionModal({ isOpen, onClose, onSave }) {
   );
 }
 
-export default ExhibitionModal; 
+export default ExhibitionModal;

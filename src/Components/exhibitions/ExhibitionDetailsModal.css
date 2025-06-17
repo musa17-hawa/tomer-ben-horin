@@ -87,19 +87,18 @@
 }
 .artworks-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 32px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 .artwork-card {
   background: #fff;
   border-radius: 18px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 18px 12px 12px 12px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  min-width: 0;
   font-family: Assistant, sans-serif;
+  position: relative;
 }
 .artwork-image {
   width: 100%;
@@ -109,16 +108,19 @@
   margin-bottom: 12px;
 }
 .artwork-info {
-  margin-bottom: 10px;
+  margin-bottom: 12px;
+  flex-grow: 1;
 }
 .artwork-name {
   font-size: 1.1rem;
   font-weight: bold;
   color: #222;
+  margin-bottom: 4px;
 }
 .artwork-artist {
   font-size: 1rem;
   color: #444;
+  margin-bottom: 4px;
 }
 .artwork-price {
   font-size: 1rem;
@@ -128,6 +130,9 @@
 .artwork-actions {
   display: flex;
   gap: 8px;
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: 8px;
 }
 .artwork-edit {
   background: #fff;
@@ -135,10 +140,30 @@
   border: 1px solid #e42b60;
   border-radius: 12px;
   padding: 6px 18px;
-  font-size: 1rem;
+  font-size: 0.9rem;
   cursor: pointer;
   font-weight: bold;
+  transition: background 0.2s;
 }
 .artwork-edit:hover {
   background: #fde6ec;
+}
+.details-modal-close {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #666;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.details-modal-close:hover {
+  background: #f5f5f5;
 }

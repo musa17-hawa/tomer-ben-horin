@@ -75,9 +75,27 @@ const GalleryExhibitions = () => {
         galleryId: galleryId,
         imageUrl: imageUrl || null,
         image: null,
+        artworks: data.artworks || []
       };
 
-      await createExhibition(exhibitionData);
+      const newExhibition = await createExhibition(exhibitionData);
+      
+      // Save artworks with admin approval
+      if (data.artworks && data.artworks.length > 0) {
+        // Auto-approve admin created artworks
+        const approvedArtworks = data.artworks.map(artwork => ({
+          ...artwork,
+          approved: true,
+          createdByAdmin: true
+        }));
+        
+        // Update exhibition with approved artworks
+        await updateExhibition(newExhibition.id, {
+          ...exhibitionData,
+          artworks: approvedArtworks
+        });
+      }
+
       await loadGalleryAndExhibitions();
       showToast("התערוכה נוספה בהצלחה!");
     } catch (err) {
@@ -101,7 +119,18 @@ const GalleryExhibitions = () => {
         galleryId: galleryId,
         imageUrl: imageUrl || null,
         image: null,
+        artworks: data.artworks || selectedExhibition.artworks || []
       };
+
+      // Auto-approve any new artworks added by admin
+      if (data.artworks) {
+        const approvedArtworks = data.artworks.map(artwork => ({
+          ...artwork,
+          approved: true,
+          createdByAdmin: true
+        }));
+        exhibitionData.artworks = approvedArtworks;
+      }
 
       await updateExhibition(selectedExhibition.id, exhibitionData);
       await loadGalleryAndExhibitions();
@@ -154,6 +183,22 @@ const GalleryExhibitions = () => {
   const handleDetailsClick = (exhibition) => {
     setSelectedExhibition(exhibition);
     setDetailsModalOpen(true);
+  };
+
+  const handleUpdateArtworks = (updatedArtworks) => {
+    // Auto-approve artworks created by admin
+    const approvedArtworks = updatedArtworks.map(artwork => ({
+      ...artwork,
+      approved: true,
+      createdByAdmin: true
+    }));
+    
+    const updatedExhibitions = exhibitions.map((exh) =>
+      exh.id === selectedExhibition.id
+        ? { ...exh, artworks: approvedArtworks }
+        : exh
+    );
+    setExhibitions(updatedExhibitions);
   };
 
   // Filter and sort exhibitions
@@ -318,7 +363,7 @@ const GalleryExhibitions = () => {
             setSelectedExhibition(null);
           }}
           exhibition={selectedExhibition}
-          onUpdateArtworks={() => {}}
+          onUpdateArtworks={handleUpdateArtworks}
         />
       )}
       <DeleteConfirmModal
