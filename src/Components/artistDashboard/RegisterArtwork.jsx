@@ -29,6 +29,7 @@ const RegisterArtwork = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [year, setYear] = useState("");
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -106,6 +107,7 @@ const RegisterArtwork = () => {
         artworkName,
         description,
         imageUrl,
+        year,
         size,
         price: price.trim() === "" ? "please contact artist" : price.trim(),
         createdAt: Timestamp.now(),
@@ -117,6 +119,7 @@ const RegisterArtwork = () => {
       setImage(null);
       setImagePreview("");
       setSize("");
+      setYear("");
       setPrice("");
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
@@ -165,6 +168,17 @@ const RegisterArtwork = () => {
             value={size}
             onChange={(e) => setSize(e.target.value)}
             required
+          />
+        </label>
+
+        <label>
+          שנת היצירה:*
+          <input
+            type="text"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            required
+            placeholder="למשל: 2023"
           />
         </label>
 

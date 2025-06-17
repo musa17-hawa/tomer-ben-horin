@@ -11,6 +11,7 @@ import Profile from "./Components/artists/profileAdmin";
 import AdminLogin from "./Components/adminlogin/AdminLogin";
 import ArtistDashboard from "./Components/artistDashboard/ArtistDashboard";
 import AdminArtworksReview from "./Components/exhibitions/AdminArtworksReview";
+import AdminAllArtworks from "./Components/exhibitions/AdminAllArtworks";
 
 function App() {
   return (
@@ -32,6 +33,10 @@ function App() {
         <Route
           path="/admin-artworks-review/:exhibitionId"
           element={<AdminArtworksReview />}
+        />
+        <Route
+          path="/admin-all-artworks/:exhibitionId"
+          element={<AdminAllArtworks />}
         />
 
         <Route

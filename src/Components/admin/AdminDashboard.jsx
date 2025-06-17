@@ -3,6 +3,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { useNavigate } from "react-router-dom";
 import { db } from "../../firebase/config";
 import "../exhibitions/Dashboard.css";
+// noor
 
 const AdminDashboard = () => {
   const [artists, setArtists] = useState([]);
@@ -51,14 +52,23 @@ const AdminDashboard = () => {
         <div className="dashboard-nav">
           <button
             className="dashboard-btn"
-            onClick={() => navigate('/user-dashboard')}
+            onClick={() => navigate("/user-dashboard")}
           >
             חזור לתערוכות
           </button>
         </div>
       </header>
+
       <div className="dashboard-actions-row">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', width: '100%', justifyContent: 'flex-end' }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+            width: "100%",
+            justifyContent: "flex-end",
+          }}
+        >
           <div className="dashboard-search-group">
             <input
               className="dashboard-search"
@@ -96,11 +106,9 @@ const AdminDashboard = () => {
             />
             <div className="artist-info card-header">
               <p>
-                <strong>{artist.name}</strong> 
+                <strong>{artist.name}</strong>
               </p>
-              <p>
-                {artist.place ? artist.place : "לא צויין מקום"}
-              </p>
+              <p>{artist.place ? artist.place : "לא צויין מקום"}</p>
             </div>
             <div className="card-actions">
               <button
@@ -120,4 +128,4 @@ const AdminDashboard = () => {
   );
 };
 
-export default AdminDashboard; 
+export default AdminDashboard;

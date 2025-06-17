@@ -2,145 +2,192 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/config";
+import { useNavigate } from "react-router-dom";
+// import "./AdminAllArtworks.css"; // Assuming you have a CSS file for styling
 import "./AdminArtworksReview.css";
 
-const AdminArtworksReview = () => {
+export default function AdminArtworksReview() {
   const { exhibitionId } = useParams();
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchArtworks = async () => {
+    async function fetchArtworks() {
       try {
-        const allArtworks = [];
-
-        const usersSnapshot = await getDocs(collection(db, "users"));
-        for (const userDoc of usersSnapshot.docs) {
+        const all = [];
+        const usersSnap = await getDocs(collection(db, "users"));
+        for (const userDoc of usersSnap.docs) {
           const userData = userDoc.data();
-          const registrationsRef = collection(
-            db,
-            "users",
-            userDoc.id,
-            "registrations"
+          const regs = await getDocs(
+            collection(db, "users", userDoc.id, "registrations")
           );
-          const registrationsSnap = await getDocs(registrationsRef);
-
-          for (const regDoc of registrationsSnap.docs) {
-            const regExhibitionId = regDoc.id;
-            if (regExhibitionId !== exhibitionId) continue; // Skip if not the selected exhibition
-
-            const artworksRef = collection(
-              db,
-              "users",
-              userDoc.id,
-              "registrations",
-              regExhibitionId,
-              "artworks"
+          for (const regDoc of regs.docs) {
+            if (regDoc.id !== exhibitionId) continue;
+            const arts = await getDocs(
+              collection(
+                db,
+                "users",
+                userDoc.id,
+                "registrations",
+                regDoc.id,
+                "artworks"
+              )
             );
-            const artworksSnap = await getDocs(artworksRef);
-
-            artworksSnap.forEach((artDoc) => {
-              allArtworks.push({
+            arts.forEach((artDoc) => {
+              all.push({
                 id: artDoc.id,
                 userId: userDoc.id,
-                exhibitionId: regExhibitionId,
+                exhibitionId: regDoc.id,
                 artistName: userData.name || "לא ידוע",
                 ...artDoc.data(),
               });
             });
           }
         }
-
-        setArtworks(allArtworks);
-        setLoading(false);
-        setError("");
-      } catch (err) {
-        console.error("Error fetching artworks:", err);
+        setArtworks(all);
+      } catch {
         setError("שגיאה בטעינת היצירות");
+      } finally {
         setLoading(false);
       }
-    };
+    }
     fetchArtworks();
   }, [exhibitionId]);
 
-  const handleApprove = async (userId, exhibitionId, artworkId) => {
-    try {
-      const ref = doc(
-        db,
-        "users",
-        userId,
-        "registrations",
-        exhibitionId,
-        "artworks",
-        artworkId
-      );
-      await updateDoc(ref, { approved: true });
-      setArtworks((prev) =>
-        prev.map((a) =>
-          a.id === artworkId &&
-          a.userId === userId &&
-          a.exhibitionId === exhibitionId
-            ? { ...a, approved: true }
-            : a
-        )
-      );
-    } catch (err) {
-      setError("שגיאה באישור היצירה");
-      console.error("Error approving artwork:", err);
-    }
-  };
+  async function handleApprove(userId, exId, artId) {
+    const ref = doc(
+      db,
+      "users",
+      userId,
+      "registrations",
+      exId,
+      "artworks",
+      artId
+    );
+    await updateDoc(ref, { approved: true });
+    setArtworks((prev) =>
+      prev.map((a) =>
+        a.id === artId && a.userId === userId ? { ...a, approved: true } : a
+      )
+    );
+  }
+  async function handleUnApprove(userId, exId, artId) {
+    const ref = doc(
+      db,
+      "users",
+      userId,
+      "registrations",
+      exId,
+      "artworks",
+      artId
+    );
+    await updateDoc(ref, { approved: false });
+    setArtworks((prev) =>
+      prev.map((a) =>
+        a.id === artId && a.userId === userId ? { ...a, approved: false } : a
+      )
+    );
+  }
 
   return (
     <div className="artworks-review-container">
-      <h2>אישור יצירות</h2>
-      {loading && <p>טוען...</p>}
-      {error && <p className="error">{error}</p>}
+      {/* ——— Sticky Header ——— */}
+      {/* <div className="review-header">
+        <img
+          src="https://amutatbh.com/wp-content/uploads/2021/03/logo-new.svg"
+          alt="Logo"
+          className="review-logo"
+        />
+        <h2 className="review-title">אישור יצירות</h2>
+      </div> */}
+      <div className="review-header">
+        <img
+          src="https://amutatbh.com/wp-content/uploads/2021/03/logo-new.svg"
+          alt="Logo"
+          className="review-logo"
+          onClick={() => navigate("/user-dashboard")}
+          style={{ cursor: "pointer" }}
+        />
+        <h2 className="review-title">אישור יצירות</h2>
+        <div style={{ marginRight: "auto", display: "flex", gap: "1rem" }}>
+          <button
+            onClick={() => navigate("/user-dashboard")}
+            className="header-button"
+          >
+            חזרה ללוח הניהול
+          </button>
+          <button
+            onClick={() => navigate(`/admin-all-artworks/${exhibitionId}`)}
+            className="header-button"
+          >
+            כל היצירות
+          </button>
+        </div>
+      </div>
+
+      {/* ——— Loading / Error / Empty ——— */}
+      {loading && <p className="full-message">טוען…</p>}
+      {!loading && error && <p className="full-message error">{error}</p>}
       {!loading && !error && artworks.length === 0 && (
-        <p>לא נמצאו יצירות להצגה.</p>
+        <p className="full-message">לא נמצאו יצירות להצגה.</p>
       )}
-      {!loading &&
-        !error &&
-        artworks.map((art) => (
-          <div key={art.id} className="artwork-card">
-            {art.imageUrl && (
-              <img
-                src={art.imageUrl}
-                alt={art.artworkName}
-                className="artwork-image"
-              />
-            )}
-            <div className="artwork-info">
-              <h3>{art.artworkName}</h3>
-              <p>
-                <strong>אמן:</strong> {art.artistName}
-              </p>
-              <p>
-                <strong>תיאור:</strong> {art.description || "אין תיאור"}
-              </p>
-              <p>
-                <strong>מידות:</strong> {art.size}
-              </p>
-              <p>
-                <strong>מחיר:</strong> {art.price}
-              </p>
-              {!art.approved ? (
-                <button
-                  className="approve-button"
-                  onClick={() =>
-                    handleApprove(art.userId, art.exhibitionId, art.id)
-                  }
-                >
-                  ✔️ אשר יצירה
-                </button>
-              ) : (
-                <span className="approved-badge">✔️ מאושר</span>
+
+      {/* ——— Grid of Cards ——— */}
+      <div className="cards-grid">
+        {!loading &&
+          !error &&
+          artworks.map((art) => (
+            <div key={art.id} className="artwork-card">
+              {art.imageUrl && (
+                <img
+                  src={art.imageUrl}
+                  alt={art.artworkName}
+                  className="artwork-image"
+                />
               )}
+              <div className="artwork-info">
+                <h3>{art.artworkName}</h3>
+                <p>
+                  <strong>אמן:</strong> {art.artistName}
+                </p>
+                <p>
+                  <strong>תיאור:</strong> {art.description || "אין תיאור"}
+                </p>
+                <p>
+                  <strong>מידות:</strong> {art.size}
+                </p>
+                <p>
+                  <strong>שנת היצור:</strong> {art.year || "0000"}
+                </p>
+                <p>
+                  <strong>מחיר:</strong> {art.price}
+                </p>
+
+                {art.approved ? (
+                  <button
+                    className="unapprove-button"
+                    onClick={() =>
+                      handleUnApprove(art.userId, art.exhibitionId, art.id)
+                    }
+                  >
+                    ❌ בטל אישור
+                  </button>
+                ) : (
+                  <button
+                    className="approve-button"
+                    onClick={() =>
+                      handleApprove(art.userId, art.exhibitionId, art.id)
+                    }
+                  >
+                    ✔️ אשר יצירה
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+      </div>
     </div>
   );
-};
-
-export default AdminArtworksReview;
+}

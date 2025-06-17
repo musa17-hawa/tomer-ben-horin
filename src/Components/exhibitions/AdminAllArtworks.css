@@ -4,10 +4,11 @@
   padding: 100px 20px 40px;
   direction: rtl;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #222;
   box-sizing: border-box;
+  /* background-color: #fafafa; */
 }
 
-/* ---------- Sticky Header ---------- */
 .review-header {
   position: fixed;
   top: 0;
@@ -27,28 +28,31 @@
   height: 56px;
   cursor: pointer;
   transition: transform 0.2s ease;
-  margin-top: 12px;
 }
-
-.review-logo:hover {
+.review-logo:hover,
+.review-logo:focus {
   transform: scale(1.05);
+  outline: none;
 }
 
 .review-title {
   font-size: 2rem;
-  font-weight: 800;
+  font-weight: 700;
+  width: 50%;
   color: #e91e63;
   margin: 0 auto;
+  white-space: nowrap;
   text-align: center;
-  padding: 4px 12px;
-  border-radius: 6px;
+  border: 2px solid #eeeced; /* Add a visible border */
+  border-radius: 8px;
+  padding: 6px 16px; /* Add padding for spacing inside */
+  background-color: #fbf9fa; /* Light background to match the theme */
 }
 
 .review-header-buttons {
   display: flex;
   gap: 12px;
   margin-right: auto;
-  flex-wrap: wrap;
 }
 
 .header-button {
@@ -63,7 +67,6 @@
   white-space: nowrap;
   margin: 8px;
 }
-
 .header-button:hover {
   background-color: #b0003a;
 }
@@ -93,13 +96,11 @@
   gap: 24px;
   justify-content: center;
   margin-top: 30px;
-  padding-right: 8px;
 }
 
 /* ---------- Individual Card ---------- */
 .artwork-card {
   flex: 0 1 280px;
-  max-width: 280px;
   display: flex;
   flex-direction: column;
   background: #ffffff;
@@ -107,7 +108,7 @@
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 2px solid #e91e63;
+  border: 1px solid #cf9dae;
   text-align: center;
 }
 
@@ -118,33 +119,64 @@
 
 .artwork-image {
   width: 100%;
-  height: 160px;
+  height: 200px;
   object-fit: cover;
-  border-bottom: 2px solid #e91e63;
+  border-bottom: 1px solid #e91e63;
   border-radius: 16px 16px 0 0;
-  padding: 4px;
+  padding: 6px;
   box-sizing: border-box;
 }
 
 /* ---------- Info Block ---------- */
-.artwork-info {
-  padding: 16px;
+/* .artwork-info {
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: center;
   gap: 10px;
   text-align: center;
 }
 
 .artwork-info h3 {
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: #222;
+  font-size: 1.3rem;
   margin: 0;
+  color: #222;
+  text-align: center;
+} */
+.artwork-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* CENTER ALL CONTENT */
+  gap: 10px;
+  text-align: center;
+}
+
+.artwork-info h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 800; /* STRONGER BOLD */
+  color: #111;
+  text-align: center;
 }
 
 .artwork-info p {
   font-size: 1rem;
+  color: #333;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.artwork-info p strong {
+  font-weight: 800;
+  color: #111;
+  margin-left: 4px;
+}
+
+.artwork-info p {
+  font-size: 0.95rem;
   color: #444;
   margin: 0;
   line-height: 1.5;
@@ -152,56 +184,37 @@
 
 .artwork-info p strong {
   color: #111;
-  font-weight: 800;
+  font-weight: bold;
   margin-left: 6px;
 }
 
 /* ---------- Buttons ---------- */
-.approve-button {
-  background-color: #4caf50;
-  color: white;
+.approve-button,
+.approved-badge {
+  margin-top: 14px;
+  align-self: center;
   font-weight: 600;
   padding: 8px 20px;
   border-radius: 20px;
   font-size: 0.95rem;
   border: none;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
-  transition: background-color 0.3s ease;
-  margin-top: 14px;
+  white-space: nowrap;
 }
 
+.approve-button {
+  background-color: #e91e63;
+  color: white;
+  box-shadow: 0 2px 6px rgba(233, 30, 99, 0.5);
+}
 .approve-button:hover {
-  background-color: #388e3c;
+  background-color: #b0003a;
 }
 
 .approved-badge {
   background-color: #4caf50;
   color: white;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.95rem;
   box-shadow: 0 2px 6px rgba(76, 175, 80, 0.6);
-  margin-top: 14px;
-}
-
-/* Unapprove Button */
-.unapprove-button {
-  background-color: #f44336;
-  color: white;
-  font-weight: 600;
-  padding: 8px 20px;
-  border-radius: 20px;
-  font-size: 0.95rem;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
-  transition: background-color 0.3s ease;
-}
-
-.unapprove-button:hover {
-  background-color: #c62828;
 }
 
 /* ---------- Responsive ---------- */
@@ -217,7 +230,7 @@
   }
 
   .review-title {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
   }
 
   .review-header {
@@ -227,6 +240,7 @@
   }
 
   .review-header-buttons {
+    flex-wrap: wrap;
     justify-content: center;
     width: 100%;
   }
