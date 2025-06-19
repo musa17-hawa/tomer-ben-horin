@@ -1,0 +1,233 @@
+.artworks-review-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 100px 20px 40px;
+  direction: rtl;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+/* ---------- Sticky Header ---------- */
+.review-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+.review-logo {
+  height: 56px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  margin-top: 12px;
+}
+
+.review-logo:hover {
+  transform: scale(1.05);
+}
+
+.review-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #e91e63;
+  margin: 0 auto;
+  text-align: center;
+  padding: 4px 12px;
+  border-radius: 6px;
+}
+
+.review-header-buttons {
+  display: flex;
+  gap: 12px;
+  margin-right: auto;
+  flex-wrap: wrap;
+}
+
+.header-button {
+  background-color: #e91e63;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+  margin: 8px;
+}
+
+.header-button:hover {
+  background-color: #b0003a;
+}
+
+.full-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin: 60px 0;
+}
+
+.error {
+  color: #d32f2f;
+  background: #fcebea;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 480px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(211, 47, 47, 0.25);
+}
+
+/* ---------- Cards Grid ---------- */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 30px;
+  padding-right: 8px;
+}
+
+/* ---------- Individual Card ---------- */
+.artwork-card {
+  flex: 0 1 280px;
+  max-width: 280px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 2px solid #e91e63;
+  text-align: center;
+}
+
+.artwork-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+.artwork-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 2px solid #e91e63;
+  border-radius: 16px 16px 0 0;
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+/* ---------- Info Block ---------- */
+.artwork-info {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.artwork-info h3 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #222;
+  margin: 0;
+}
+
+.artwork-info p {
+  font-size: 1rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.artwork-info p strong {
+  color: #111;
+  font-weight: 800;
+  margin-left: 6px;
+}
+
+/* ---------- Buttons ---------- */
+.approve-button {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.4);
+  transition: background-color 0.3s ease;
+  margin-top: 14px;
+}
+
+.approve-button:hover {
+  background-color: #388e3c;
+}
+
+.approved-badge {
+  background-color: #4caf50;
+  color: white;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.6);
+  margin-top: 14px;
+}
+
+/* Unapprove Button */
+.unapprove-button {
+  background-color: #f44336;
+  color: white;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(244, 67, 54, 0.4);
+  transition: background-color 0.3s ease;
+}
+
+.unapprove-button:hover {
+  background-color: #c62828;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .artwork-card {
+    flex: 0 1 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .artwork-card {
+    flex: 0 1 100%;
+  }
+
+  .review-title {
+    font-size: 1.6rem;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .review-header-buttons {
+    justify-content: center;
+    width: 100%;
+  }
+}
