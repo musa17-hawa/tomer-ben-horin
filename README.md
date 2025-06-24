@@ -71,3 +71,11 @@ This project was developed for the **Tomer Ben Horin Association**, which curren
 
 ---
 
+
+## 📄 Final Presentation
+
+You can download our full presentation here:
+
+👉 [Download the project presentation (.pptx)](https://github.com/musa17-hawa/tomer-ben-horin/raw/main/Tomer-Ben-Horin-Art-Gallery-Management-Platform%20(1).pptx)
+
+
