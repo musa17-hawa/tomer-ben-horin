@@ -1,44 +1,73 @@
-# React + Vite
+# 🎨 Tomer Ben Horin – Art Gallery Management Platform
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A comprehensive platform bridging artists, administrators, and art enthusiasts in a modern digital environment.
 
-Currently, two official plugins are available:
+---
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+## 🧠 Project Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project was developed for the **Tomer Ben Horin Association**, which currently runs a website promoting artists. While their existing platform allows artists to publish personal profiles, it lacks the ability to manage specific artwork submissions for exhibitions.
 
-## Expanding the ESLint configuration
+👉 **Our goal** was to create a management platform where:
+- Artists can register for exhibitions  
+- Upload and edit specific artworks they wish to display  
+- Admins can review, approve, and manage submitted works  
+- All data integrates with the existing site structure  
 
-# If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
 
-=======
+## 👥 Team Members
 
-> > > > > > > d50b4b1 (committs)
+- Noor Kaloti  
+- Marwa Hoshieh  
+- Fatima Abuabed  
+- Yousef Hamda  
+- Musa Abu Alhawa  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔗 [Click here to view our project wiki](https://github.com/musa17-hawa/tomer-ben-horin/wiki)
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
-<<<<<<< HEAD
+## 🚀 Key Features
 
-> > > > > > > # cfc1b5c (commit)
-> > > > > > >
-> > > > > > > d50b4b1 (committs)
+- Artist authentication and profile editing  
+- Exhibition registration system  
+- Artwork submission with image upload  
+- Admin dashboard for approval and moderation  
+- Firebase + Firestore integration for real-time updates  
 
-npm install firebase-admin puppeteer node-fetch
+---
 
-to run backend:
+## 📚 What We Learned as a Team
 
-Install Dependencies
-Inside sync-artists folder:
+- How to divide tasks and work collaboratively  
+- Improved communication and conflict resolution  
+- Efficient use of Git, React, Firebase, and Firestore  
+- Applying agile development methods and delivering iteratively  
 
-npm init -y
-npm install puppeteer firebase-admin node-fetch
-✅ Step 5: Run the Sync Script
+---
 
-node sync-artists.js
+## ⚠️ Project Risks & How We Solved Them
+
+### 1. Missing or Incorrect Artwork Data
+- **Risk**: Artists might submit incomplete or incorrect data.  
+- **Solution**: We added required field validation and used placeholder images where needed.
+
+### 2. Unauthorized Modifications
+- **Risk**: Weak access controls could allow unauthorized editing.  
+- **Solution**: We implemented Firebase Authentication with role-based access rules.
+
+---
+
+## 🧪 Failed Tests & Fixes
+
+### ✅ Artwork Display Test
+- **Issue**: Artworks without images broke the exhibition layout.  
+- **Fix**: Added default placeholder image and improved error handling.
+
+### ✅ Artwork Edit Test
+- **Issue**: Changes to artwork titles/descriptions didn’t update in real time.  
+- **Fix**: Updated Firestore logic and re-rendered the component after edits.
+
+---
+
