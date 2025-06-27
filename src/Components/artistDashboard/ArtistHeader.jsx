@@ -21,15 +21,10 @@ const ArtistHeader = () => {
   };
 
   const isActive = (path) => {
-    console.log(`Checking path: ${path}, Current pathname: ${location.pathname}`);
     if (path === "/artist-dashboard/profile") {
-      const result = location.pathname === "/artist-dashboard" || location.pathname === "/artist-dashboard/profile";
-      console.log(`Profile isActive result: ${result}`);
-      return result;
+      return location.pathname === "/artist-dashboard/profile";
     }
-    const result = location.pathname === path;
-    console.log(`Generic isActive result for ${path}: ${result}`);
-    return result;
+    return location.pathname === path || (path === "/artist-dashboard" && location.pathname === "/artist-dashboard");
   };
 
   return (

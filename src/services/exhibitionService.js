@@ -100,4 +100,22 @@ export const getExhibitionsByStatus = async (status) => {
     console.error('Error getting exhibitions by status:', error);
     throw error;
   }
-}; 
+};
+
+// Get exhibitions by gallery ID
+export const getExhibitionsByGallery = async (galleryId) => {
+  try {
+    const q = query(
+      collection(db, COLLECTION_NAME),
+      where('galleryId', '==', galleryId)
+    );
+    const querySnapshot = await getDocs(q);
+    return querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  } catch (error) {
+    console.error('Error getting exhibitions by gallery:', error);
+    throw error;
+  }
+};

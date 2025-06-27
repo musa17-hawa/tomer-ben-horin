@@ -1,7 +1,14 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { auth, db, uploadImageToImgBB } from "../../firebase/config";
-import { collection, addDoc, doc, getDoc, Timestamp } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  getDoc,
+  setDoc,
+  Timestamp,
+} from "firebase/firestore";
 import "./RegisterArtwork.css";
 
 function useQuery() {
@@ -22,6 +29,8 @@ const RegisterArtwork = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState("");
+  const [year, setYear] = useState("");
+  const [phone, setPhone] = useState("");
 
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
@@ -62,16 +71,18 @@ const RegisterArtwork = () => {
     setError("");
     setSuccess(false);
 
-    if (!artworkName || !description || !size || !image) {
+    if (!artworkName || !description || !size || !image || !phone) {
       setError("אנא מלא את כל השדות החובה.");
       return;
     }
 
     try {
       setLoading(true);
-
       const user = auth.currentUser;
-      if (!user) throw new Error("User not logged in");
+      if (!user) {
+        setError("המשתמש לא מחובר. אנא התחבר מחדש.");
+        return;
+      }
 
       let imageUrl = "";
       if (image) {
@@ -84,17 +95,50 @@ const RegisterArtwork = () => {
         ? exhibitionSnap.data().title
         : "Untitled";
 
-      const regRef = collection(db, "users", user.uid, "registrations");
+      // Save phone to registration document
+      const registrationRef = doc(
+        db,
+        "users",
+        user.uid,
+        "registrations",
+        exhibitionId
+      );
+      await setDoc(registrationRef, { exhibitionTitle, phone }, { merge: true });
 
-      await addDoc(regRef, {
-        exhibitionId,
-        exhibitionTitle,
+      // Add artwork under this registration
+      const artworkRef = collection(registrationRef, "artworks");
+      const newArtworkDoc = await addDoc(artworkRef, {
         artworkName,
         description,
         imageUrl,
+        year,
         size,
         price: price.trim() === "" ? "please contact artist" : price.trim(),
         createdAt: Timestamp.now(),
+        approved: false,
+        phone, // Save phone with artwork for easy access
+      });
+
+      // Duplicate to centralized path
+      const centralRef = doc(
+        db,
+        "exhibition_artworks",
+        exhibitionId,
+        "artworks",
+        newArtworkDoc.id
+      );
+      await setDoc(centralRef, {
+        artworkName,
+        description,
+        imageUrl,
+        year,
+        size,
+        price: price.trim() === "" ? "please contact artist" : price.trim(),
+        createdAt: Timestamp.now(),
+        approved: false,
+        userId: user.uid,
+        artistName: user.displayName,
+        phone, // Save phone in central doc
       });
 
       setSuccess(true);
@@ -103,7 +147,9 @@ const RegisterArtwork = () => {
       setImage(null);
       setImagePreview("");
       setSize("");
+      setYear("");
       setPrice("");
+      setPhone("");
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (err) {
       console.error("Registration failed:", err);
@@ -155,6 +201,17 @@ const RegisterArtwork = () => {
         </label>
 
         <label>
+          שנת היצירה:*
+          <input
+            type="text"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            required
+            placeholder="למשל: 2023"
+          />
+        </label>
+
+        <label>
           תמונת היצירה*:
           <input
             type="file"
@@ -183,6 +240,18 @@ const RegisterArtwork = () => {
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="please contact artist"
+          />
+        </label>
+
+        <label>
+          מספר טלפון*:
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            required
+            placeholder="הכנס מספר טלפון"
+            pattern="[0-9\-\+\s]{9,15}"
           />
         </label>
 

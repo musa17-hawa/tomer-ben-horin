@@ -1,117 +1,235 @@
- /* src/components/artistDashboard/opend.css */
+/* ---------- Wrapper (Optional for background) ---------- */
+.dashboard-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  direction: rtl;
+  font-family: "Assistant", sans-serif;
+  background-image: url("https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
 
-/* Make the root only vertically padded so cards can hit the sides */
+/* ---------- Root Container ---------- */
 .dashboard-root {
-    width: 100%;
-    min-height: 100vh;
-    box-sizing: border-box;
-    padding: 2rem 0; /* top/bottom only, no side padding */
-    margin-right: 50px;
-  }
-  
-  /* Center the search bar beneath your header */
-  .dashboard-search {
-    display: block;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto 2rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 9999px;
-    font-size: 1rem;
-    text-align: right;
-    transition: border-color 0.2s, box-shadow 0.2s;
-  }
-  .dashboard-search:focus {
-    outline: none;
-    border-color: #fd3470;
-    box-shadow: 0 0 0 3px rgba(228, 43, 96, 0.2);
-  }
-  
-  /* Lay out cards in a right-to-left flex row, wrapping as needed */
-  /* .dashboard-cards {
-    display: flex;
-    flex-direction: row-reverse; /* start placing at the right edge */
-  /* flex-wrap: wrap;
-    gap: 2rem;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  } */
+  width: 100%;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 2rem 1rem;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
+/* ---------- Search Bar ---------- */
+.dashboard-search {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 2rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  font-size: 1rem;
+  text-align: right;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  height: 44px;
+  box-sizing: border-box;
+}
+
+.dashboard-search:focus {
+  outline: none;
+  border-color: #fd3470;
+  box-shadow: 0 0 0 3px rgba(228, 43, 96, 0.2);
+}
+
+/* ---------- Grid of Cards ---------- */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin: 60px auto 0 auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+/* ---------- Individual Card ---------- */
+.exhibition-card {
+  background: #fff;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.exhibition-card:hover {
+  transform: translateY(-0.5rem);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.exhibition-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.exhibition-title {
+  margin: 1rem;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.exhibition-description {
+  margin: 0 1rem 1rem;
+  flex-grow: 1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.exhibition-location,
+.exhibition-date {
+  margin: 0 1rem 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+.exhibition-date {
+  color: #888;
+}
+
+/* ---------- Button ---------- */
+.exhibition-buttons {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem;
+  flex-direction: column;
+}
+
+.exhibition-btn {
+  padding: 0.75rem;
+  background: #fd3470;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+
+.exhibition-btn:hover {
+  background: #c81f4a;
+}
+
+.bio-btn {
+  background: #fd3470;
+  color: #fff;
+}
+
+.bio-btn:hover {
+  background: #c81f4a;
+  color: #fff;
+}
+
+/* ---------- Responsive Layout ---------- */
+@media (max-width: 1200px) {
   .dashboard-cards {
-    display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start; /* wrapped rows start at the top */
-    gap: 2rem;
-    margin: 0;
-    padding: 0;
-    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
   }
   
-  /* Fixed-width cards so they stack vertically from the right */
-  .exhibition-card {
-    width: 260px;
-    background: #fff;
-    border-radius: 1rem;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-    display: flex;
+  .exhibition-buttons {
     flex-direction: column;
-  }
-  .exhibition-card:hover {
-    transform: translateY(-0.5rem);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  }
-  
-  .exhibition-image {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-  }
-  
-  .exhibition-title {
-    margin: 1rem;
-    font-size: 1.25rem;
-    font-weight: bold;
-  }
-  
-  .exhibition-description {
-    margin: 0 1rem 1rem;
-    flex-grow: 1;
-    font-size: 0.9rem;
-    line-height: 1.5;
-  }
-  
-  .exhibition-location,
-  .exhibition-date {
-    margin: 0 1rem 0.5rem;
-    font-size: 0.9rem;
-    color: #666;
-  }
-  .exhibition-date {
-    color: #888;
+    gap: 0.75rem;
   }
   
   .exhibition-btn {
-    margin: 1rem;
-    padding: 0.75rem;
-    background: #fd3470;
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s;
+    font-size: 0.85rem;
+    padding: 0.875rem;
   }
-  .exhibition-btn:hover {
-    background: #c81f4a;
+}
+
+@media (max-width: 480px) {
+  .dashboard-cards {
+    gap: 1rem;
+    padding: 0 0.5rem;
+    margin-top: 20px;
   }
   
-  /* On small screens, center the cards instead */
-  @media (max-width: 768px) {
-    .dashboard-cards {
-      justify-content: center;
-    }
+  .exhibition-buttons {
+    margin: 0.75rem;
+    gap: 0.5rem;
   }
+  
+  .exhibition-btn {
+    font-size: 0.8rem;
+    padding: 0.75rem;
+    height: 40px;
+  }
+}
+
+/* ---------- Reusable Elements ---------- */
+h3,
+p {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+/* Button Styles (Only apply to buttons inside forms or modals) */
+button {
+  background-color: #fd3470;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  direction: rtl;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button:hover {
+  background-color: #c92f5a;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Form button group (e.g., Save/Cancel) */
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.form-buttons button:last-of-type {
+  background-color: transparent;
+  color: #fd3470;
+  border: 2px solid #fd3470;
+}
+
+.form-buttons button:last-of-type:hover {
+  background-color: #fd3470;
+  color: white;
+}

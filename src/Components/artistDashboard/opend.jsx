@@ -82,14 +82,24 @@ const ExhibitionsList = () => {
               {new Date(exhibition.endDate).toLocaleDateString()}
             </p>
 
-            <button
-              onClick={() =>
-                navigate(`/artist-dashboard/register-artwork?exhibitionId=${exhibition.id}`)
-              }
-              className="exhibition-btn"
-            >
-              הרשמה לתערוכה
-            </button>
+            <div className="exhibition-buttons">
+              <button
+                onClick={() =>
+                  navigate(`/artist-dashboard/register-artwork?exhibitionId=${exhibition.id}`)
+                }
+                className="exhibition-btn"
+              >
+                הרשמה לתערוכה
+              </button>
+              <button
+                onClick={() =>
+                  navigate(`/artist-dashboard/bio-edit?exhibitionId=${exhibition.id}`)
+                }
+                className="exhibition-btn bio-btn"
+              >
+                אודות האמן
+              </button>
+            </div>
           </div>
         ))}
       </div>

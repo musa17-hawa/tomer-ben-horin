@@ -15,7 +15,14 @@ const AdminLogin = () => {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      // Check if user is admin
+      const userDoc = await getDoc(doc(db, "users", user.uid));
+      if (!userDoc.exists() || !userDoc.data().isAdmin) {
+        setError("רק אדמין יכול להיכנס כאן.");
+        return;
+      }
       navigate('/user-dashboard');
     } catch (err) {
       console.error(err);

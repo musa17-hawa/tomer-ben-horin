@@ -1,0 +1,235 @@
+/* ---------- Page Wrapper ---------- */
+.artworks-review-wrapper {
+  min-height: 100vh;
+  min-width: 100vw;
+  background-image: url("https://amutatbh.com/wp-content/uploads/2021/03/wall-bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  font-family: "Assistant", sans-serif;
+  direction: rtl;
+}
+
+/* ---------- Container ---------- */
+.artworks-review-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 120px 20px 40px;
+  box-sizing: border-box;
+  color: #222;
+}
+
+/* ---------- Header ---------- */
+.review-header {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 40px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  flex-wrap: wrap;
+}
+
+.review-logo {
+  height: 56px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.review-logo:hover,
+.review-logo:focus {
+  transform: scale(1.05);
+  outline: none;
+}
+
+.review-title {
+  font-size: 2rem;
+  font-weight: 700;
+  width: 50%;
+  text-align: center;
+  color: #e91e63;
+  background-color: #fbf9fa;
+  border: 2px solid #eeeced;
+  border-radius: 8px;
+  padding: 6px 16px;
+  white-space: nowrap;
+  margin: 0 auto;
+}
+
+.review-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-right: auto;
+}
+
+/* ---------- Buttons ---------- */
+.header-button {
+  background-color: #e91e63;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap;
+  margin: 8px;
+}
+
+.header-button:hover {
+  background-color: #b0003a;
+}
+
+/* ---------- Cards Grid ---------- */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* ---------- Individual Card ---------- */
+.artwork-card {
+  flex: 0 1 280px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #cf9dae;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.artwork-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------- Image ---------- */
+.artwork-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-bottom: 1px solid #e91e63;
+  border-radius: 16px 16px 0 0;
+  padding: 6px;
+  box-sizing: border-box;
+}
+
+/* ---------- Info Block ---------- */
+.artwork-info {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.artwork-info h3 {
+  font-size: 1.5rem;
+  margin: 0;
+  font-weight: 800;
+  color: #111;
+}
+
+.artwork-info p {
+  font-size: 0.95rem;
+  color: #444;
+  margin: 0;
+  line-height: 1.5;
+  font-weight: 500;
+}
+
+.artwork-info p strong {
+  color: #111;
+  font-weight: bold;
+  margin-left: 6px;
+}
+
+/* ---------- Status / Approvals (optional) ---------- */
+.approve-button,
+.approved-badge {
+  margin-top: 14px;
+  align-self: center;
+  font-weight: 600;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.approve-button {
+  background-color: #e91e63;
+  color: white;
+  box-shadow: 0 2px 6px rgba(233, 30, 99, 0.5);
+}
+
+.approve-button:hover {
+  background-color: #b0003a;
+}
+
+.approved-badge {
+  background-color: #4caf50;
+  color: white;
+  box-shadow: 0 2px 6px rgba(76, 175, 80, 0.6);
+}
+
+/* ---------- Loader & Message ---------- */
+.full-message {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin: 60px 0;
+}
+
+.error {
+  color: #d32f2f;
+  background: #fcebea;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 40px auto;
+  max-width: 480px;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(211, 47, 47, 0.25);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .artwork-card {
+    flex: 0 1 45%;
+  }
+}
+
+@media (max-width: 768px) {
+  .artwork-card {
+    flex: 0 1 100%;
+  }
+
+  .review-title {
+    font-size: 1.5rem;
+  }
+
+  .review-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .review-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+}

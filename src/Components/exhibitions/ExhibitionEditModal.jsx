@@ -20,7 +20,7 @@ function ExhibitionEditModal({ isOpen, onClose, onSave, exhibition }) {
     image: null,
     artists: [],
     artistSearch: '',
-    status: 'upcoming',
+    status: 'open',
     artworks: [],
     imageUrl: '',
   });
@@ -40,7 +40,7 @@ function ExhibitionEditModal({ isOpen, onClose, onSave, exhibition }) {
         image: null,
         artists: exhibition.artists || [],
         artistSearch: '',
-        status: exhibition.status || 'upcoming',
+        status: exhibition.status || 'open',
         artworks: exhibition.artworks || [],
         imageUrl: exhibition.imageUrl || '',
       });
@@ -82,14 +82,29 @@ function ExhibitionEditModal({ isOpen, onClose, onSave, exhibition }) {
   };
 
   const handleAddArtwork = (data) => {
-    setForm((prev) => ({ ...prev, artworks: [...prev.artworks, data] }));
+    // Auto-approve artwork created by admin
+    const newArtwork = {
+      ...data,
+      approved: true,
+      createdByAdmin: true,
+      id: Date.now().toString() + Math.random().toString(36).substr(2, 9)
+    };
+    
+    setForm((prev) => ({ ...prev, artworks: [...prev.artworks, newArtwork] }));
     showToast('היצירה נוספה בהצלחה!');
   };
 
   const handleEditArtwork = (data) => {
+    // Auto-approve edited artwork by admin
+    const updatedArtwork = {
+      ...data,
+      approved: true,
+      createdByAdmin: true
+    };
+    
     setForm((prev) => ({
       ...prev,
-      artworks: prev.artworks.map((art, idx) => idx === editingArtworkIdx ? data : art),
+      artworks: prev.artworks.map((art, idx) => idx === editingArtworkIdx ? updatedArtwork : art),
     }));
     showToast('היצירה עודכנה בהצלחה!');
   };
@@ -231,6 +246,11 @@ function ExhibitionEditModal({ isOpen, onClose, onSave, exhibition }) {
                       <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{art.name}</div>
                       <div style={{ color: '#e42b60', marginBottom: 4 }}>{art.artist}</div>
                       <div style={{ color: '#444', fontSize: '0.98em' }}>{art.description}</div>
+                      {art.approved && (
+                        <div style={{ color: 'green', fontSize: '0.8rem', marginTop: '0.5rem' }}>
+                          ✓ מאושר אוטומטית
+                        </div>
+                      )}
                     </div>
                   </li>
                 ))}
@@ -260,4 +280,4 @@ function ExhibitionEditModal({ isOpen, onClose, onSave, exhibition }) {
   );
 }
 
-export default ExhibitionEditModal; 
+export default ExhibitionEditModal;

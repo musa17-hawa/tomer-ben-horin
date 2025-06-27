@@ -11,7 +11,7 @@ import "./ArtistProfile.css";
 
 const MAX_IMAGE_SIZE_MB = 5;
 
-const ArtistProfile = () => {
+const Profile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -29,28 +29,14 @@ const ArtistProfile = () => {
   useEffect(() => {
     const unsubAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Use 'id' from params if available, otherwise use current user's UID
-        const targetUserId = id || user.uid;
-        const docRef = doc(db, "users", targetUserId);
-        const unsubDoc = onSnapshot(docRef, async (snap) => {
+        const docRef = doc(db, "users", user.uid);
+        const unsubDoc = onSnapshot(docRef, (snap) => {
           if (snap.exists()) {
             setProfile(snap.data());
             setMessage("");
           } else {
-            // Create a new user document if it doesn't exist
-            const newUserDoc = {
-              name: user.displayName || "",
-              email: user.email || "",
-              phone: "",
-              bio: "",
-              website: "",
-              instagram: "",
-              facebook: "",
-              imageUrl: user.photoURL || ""
-            };
-            await setDoc(doc(db, "users", user.uid), newUserDoc);
-            setProfile(newUserDoc);
-            setMessage("No profile found, created a new one.");
+            setProfile(null);
+            setMessage("No profile found.");
           }
           setLoading(false);
         });
@@ -62,7 +48,7 @@ const ArtistProfile = () => {
       }
     });
     return () => unsubAuth();
-  }, [id]); // Depend on 'id' to re-fetch if URL param changes
+  }, []);
 
   // Cleanup preview URL
   useEffect(() => {
@@ -87,14 +73,24 @@ const ArtistProfile = () => {
     setMessage("");
   };
 
-  // Using the new centralized uploadImageToImgBB utility from firebase/config
+  const uploadImageToImgBB = async (file) => {
+    const apiKey = "8f43d546efb93c05215267d303f475e7";
+    const form = new FormData();
+    form.append("image", file);
+    const res = await axios.post(
+      `https://api.imgbb.com/1/upload?key=${apiKey}`,
+      form
+    );
+    return res.data.data.url;
+  };
+
   const handleImageUpload = async () => {
-    if (!imageFile) return profile?.image || profile?.imageUrl || ""; // Use existing image if no new file selected
+    if (!imageFile) return profile?.image || "";
     try {
       return await uploadImageToImgBB(imageFile);
-    } catch (err) {
-      setMessage("Failed to upload image." + (err.message ? ` (${err.message})` : ""));
-      return profile?.image || profile?.imageUrl || "";
+    } catch {
+      setMessage("Failed to upload image.");
+      return profile?.image || "";
     }
   };
 
@@ -105,14 +101,13 @@ const ArtistProfile = () => {
 
     if (!name) errs.name = "שדה חובה";
     if (!email) errs.email = "שדה חובה";
-    // subject and place are not always required in the ArtistProfile, so remove required validation for now or adjust based on your schema.
-    // if (!subject) errs.subject = "שדה חובה";
-    // if (!place) errs.place = "שדה חובה";
+    if (!subject) errs.subject = "שדה חובה";
+    if (!place) errs.place = "שדה חובה";
     if (!bio) errs.bio = "שדה חובה";
 
     // no numeric-only
     for (let [k, v] of Object.entries({ name, bio, subject, email, place })) {
-      if (typeof v === 'string' && /^\d+$/.test(v)) errs[k] = "אסור להזין מספר בלבד";
+      if (/^\d+$/.test(v)) errs[k] = "אסור להזין מספר בלבד";
     }
 
     if (Object.keys(errs).length) {
@@ -125,26 +120,21 @@ const ArtistProfile = () => {
 
     try {
       const imageUrl = await handleImageUpload();
-      const targetUserId = id || auth.currentUser.uid;
-      await updateDoc(doc(db, "users", targetUserId), {
+      await updateDoc(doc(db, "users", auth.currentUser.uid), {
         ...profile,
-        image: imageUrl, // Storing as 'image' to match the provided Profile component structure
-        imageUrl: imageUrl, // Also keep imageUrl for consistency with prior setup if needed
+        image: imageUrl,
       });
       setMessage("Profile updated successfully");
       setTimeout(() => setMessage(""), 5000);
-    } catch (err) {
-      setMessage("Failed to update profile." + (err.message ? ` (${err.message})` : ""));
+    } catch {
+      setMessage("Failed to update profile.");
     } finally {
       setIsSaving(false);
     }
   };
 
   const handleExportPDF = async () => {
-    if (!printRef.current) {
-      setMessage("Error: PDF export element not found.");
-      return;
-    }
+    if (!printRef.current) return;
     try {
       const canvas = await html2canvas(printRef.current, {
         scale: 3,
@@ -157,13 +147,13 @@ const ArtistProfile = () => {
       const h = (canvas.height * w) / canvas.width;
       pdf.addImage(img, "PNG", 10, 10, w - 20, h - 20);
       pdf.save("profile.pdf");
-    } catch (err) {
-      setMessage("Failed to export PDF." + (err.message ? ` (${err.message})` : ""));
+    } catch {
+      setMessage("Failed to export PDF.");
     }
   };
 
-  if (loading) return <p className="loading">Loading...</p>;
-  if (!profile) return <p className="message">{message}</p>;
+  if (loading) return <p>Loading...</p>;
+  if (!profile) return <p>{message}</p>;
 
   return (
     <div className="profile-container" ref={profileRef}>
@@ -173,7 +163,7 @@ const ArtistProfile = () => {
           <h3>Profile Picture</h3>
           <img
             src={
-              previewImage || profile.image || profile.imageUrl || "https://via.placeholder.com/140"
+              previewImage || profile.image || "https://via.placeholder.com/140"
             }
             alt="Profile"
             className="profile-picture"
@@ -271,7 +261,11 @@ const ArtistProfile = () => {
             </label>
 
             {/* 6. Bio */}
-            <label htmlFor="bio" className="profile-label">
+            <label
+              htmlFor="bio"
+              className="profile-label"
+              style={{ gridColumn: "span 2" }}
+            >
               <span className="label-text">
                 ביו<span className="required-marker">*</span>
               </span>
@@ -302,7 +296,7 @@ const ArtistProfile = () => {
             </label>
 
             {/* 8. QR Code */}
-            {profile.link && ( // Only show if link exists
+            {profile.link && (
               <div className="qr-code-container">
                 <QRCodeCanvas value={profile.link} size={128} />
               </div>
@@ -310,19 +304,20 @@ const ArtistProfile = () => {
           </div>
 
           {/* Actions */}
-          <div className="actions">
+          <div className="profile-buttons">
             <button
-              className="save-button"
               type="button"
               onClick={handleSave}
               disabled={isSaving}
+              className="save-button"
             >
               {isSaving ? "שומר..." : "שמור שינויים"}
             </button>
             <button
-              className="pdf-button"
               type="button"
               onClick={handleExportPDF}
+              className="pdf-button"
+              style={{ marginTop: '0.5rem' }}
             >
               Export PDF
             </button>
@@ -354,9 +349,9 @@ const ArtistProfile = () => {
               src={profile.image}
               alt="Profile"
               style={{
-                width: 160,
-                height: 160,
-                borderRadius: "50%",
+                width: 300,
+                height: 300,
+                borderRadius: "10%",
                 objectFit: "cover",
                 border: "3px solid #4a90e2",
                 marginBottom: 15,
@@ -462,4 +457,4 @@ const ArtistProfile = () => {
   );
 };
 
-export default ArtistProfile; 
+export default Profile;
