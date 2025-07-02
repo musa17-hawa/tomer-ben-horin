@@ -1,3 +1,13 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "functions": {
+    "functions/api/sync.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/sync",
+      "dest": "functions/api/sync.js"
+    }
+  ]
 }
