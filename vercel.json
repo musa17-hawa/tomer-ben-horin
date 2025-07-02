@@ -1,13 +1,13 @@
 {
   "functions": {
-    "functions/api/**/*.js": {
+    "api/sync.js": {
       "runtime": "nodejs18.x"
     }
   },
   "routes": [
     {
       "src": "/api/sync",
-      "dest": "functions/api/sync.js"
+      "dest": "api/sync.js"
     }
   ]
 }
