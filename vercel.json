@@ -1,7 +1,7 @@
 {
   "functions": {
     "api/sync.js": {
-      "runtime": "@vercel/node@1.16.0"
+      "runtime": "nodejs18.x"
     }
   },
   "routes": [
