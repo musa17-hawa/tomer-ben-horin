@@ -1,6 +1,6 @@
 {
   "functions": {
-    "functions/api/sync.js": {
+    "functions/api/**/*.js": {
       "runtime": "nodejs18.x"
     }
   },
