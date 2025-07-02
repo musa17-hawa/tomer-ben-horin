@@ -1,8 +1,17 @@
-const puppeteer = require("puppeteer");
-const { getFirestore } = require("firebase-admin/firestore");
-const { getAuth } = require("firebase-admin/auth");
-const fetch = (...args) =>
-  import("node-fetch").then(({ default: fetch }) => fetch(...args));
+// /src/utils/syncArtists.js
+import puppeteer from "puppeteer";
+import fetch from "node-fetch";
+import { getFirestore } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
+import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
+
+// Init Firebase only once
+if (!global._firebaseAppInitialized) {
+  initializeApp({
+    credential: applicationDefault(),
+  });
+  global._firebaseAppInitialized = true;
+}
 
 const db = getFirestore();
 const auth = getAuth();
@@ -38,14 +47,12 @@ async function getArtistDetails(browser, url) {
           ?.parentElement.innerText.replace("אזור מגורים:", "")
           .trim() || "";
       const place = group;
-
       const link =
         Array.from(
           document.querySelectorAll(".jet-listing-dynamic-link__link")
         ).filter(
           (el) => el.href?.includes("http") && !el.href.includes("mailto")
         )[0]?.href || "";
-
       const image =
         document.querySelector(
           ".elementor-element-843105e img.attachment-full.size-full"
@@ -63,7 +70,7 @@ async function getArtistDetails(browser, url) {
   }
 }
 
-async function syncArtists() {
+export async function syncArtists() {
   let allArtists = [];
   let pageNumber = 1;
   const perPage = 100;
@@ -100,9 +107,7 @@ async function syncArtists() {
 
         if (!email || !name) {
           console.warn(
-            `⚠️ Skipping due to missing info: ${name || "Unknown"} (${
-              email || "no email"
-            })`
+            `⚠️ Skipping: ${name || "Unknown"} (${email || "no email"})`
           );
           return;
         }
@@ -159,5 +164,3 @@ async function syncArtists() {
   await browser.close();
   console.log("🎉 All artists synced.");
 }
-
-module.exports = { syncArtists };

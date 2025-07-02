@@ -1,4 +1,5 @@
-import { syncArtists } from "../../src/utils/syncArtists.js";
+// /api/sync.js
+import { syncArtists } from "../src/utils/syncArtists.js";
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
