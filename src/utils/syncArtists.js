@@ -6,9 +6,23 @@ import { getAuth } from "firebase-admin/auth";
 import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
 
 // Init Firebase only once
+// if (!global._firebaseAppInitialized) {
+//   // initializeApp({
+//   //   credential: applicationDefault(),
+//   // });
+//   const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_KEY);
+//   initializeApp({
+//     credential: cert(serviceAccount),
+//   });
+
+//   global._firebaseAppInitialized = true;
+// }
+import { initializeApp, cert } from "firebase-admin/app";
+
 if (!global._firebaseAppInitialized) {
+  const serviceAccount = JSON.parse(process.env.FIREBASE_ADMIN_KEY);
   initializeApp({
-    credential: applicationDefault(),
+    credential: cert(serviceAccount),
   });
   global._firebaseAppInitialized = true;
 }
