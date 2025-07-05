@@ -3,7 +3,6 @@ import puppeteer from "puppeteer";
 import fetch from "node-fetch";
 import { getFirestore } from "firebase-admin/firestore";
 import { getAuth } from "firebase-admin/auth";
-import { initializeApp, applicationDefault, cert } from "firebase-admin/app";
 
 // Init Firebase only once
 // if (!global._firebaseAppInitialized) {
