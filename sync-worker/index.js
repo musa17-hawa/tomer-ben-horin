@@ -1,5 +1,5 @@
 import cron from "node-cron";
-import { syncArtists } from "./syncArtists.js";
+import { syncArtists } from "../src/utils/syncArtists.js";
 
 console.log("🕒 Sync worker running...");
 
