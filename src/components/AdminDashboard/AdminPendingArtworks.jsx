@@ -228,13 +228,7 @@
 // export default AdminPendingArtworks;
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import {
-  collection,
-  getDocs,
-  doc,
-  updateDoc,
-  deleteDoc,
-} from "firebase/firestore";
+import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
 
 const AdminPendingArtworks = () => {
   const [pendingGrouped, setPendingGrouped] = useState({});
@@ -258,7 +252,7 @@ const AdminPendingArtworks = () => {
           );
           const filtered = artworksSnap.docs
             .map((doc) => ({ id: doc.id, ...doc.data() }))
-            .filter((a) => !a.approved && !a.addedByAdmin); // keep rejected too
+            .filter((a) => !a.approved && !a.rejected);
 
           if (filtered.length > 0) {
             pending[exhibition.id] = {
@@ -304,11 +298,21 @@ const AdminPendingArtworks = () => {
       updateDoc(centralRef, { approved: true }),
     ]);
 
-    removeArtworkFromState(exhibitionId, artworkId);
+    setPendingGrouped((prev) => {
+      const updated = { ...prev };
+      updated[exhibitionId].artworks = updated[exhibitionId].artworks.filter(
+        (a) => a.id !== artworkId
+      );
+      if (updated[exhibitionId].artworks.length === 0) {
+        delete updated[exhibitionId];
+        setSelectedExhibition(null);
+      }
+      return updated;
+    });
   };
 
-  const handleRejection = async (exhibitionId, artworkId, userId) => {
-    const confirm = window.confirm("האם אתה בטוח שברצונך לדחות יצירה זו?");
+  const handleDelete = async (exhibitionId, artworkId, userId) => {
+    const confirm = window.confirm("האם אתה בטוח שברצונך לדחות את היצירה?");
     if (!confirm) return;
 
     const userRef = doc(
@@ -333,38 +337,6 @@ const AdminPendingArtworks = () => {
       updateDoc(centralRef, { rejected: true }),
     ]);
 
-    removeArtworkFromState(exhibitionId, artworkId);
-  };
-
-  const handlePermanentDelete = async (exhibitionId, artworkId, userId) => {
-    const confirm = window.confirm(
-      "האם אתה בטוח שברצונך למחוק לצמיתות את היצירה?"
-    );
-    if (!confirm) return;
-
-    const userRef = doc(
-      db,
-      "users",
-      userId,
-      "registrations",
-      exhibitionId,
-      "artworks",
-      artworkId
-    );
-    const centralRef = doc(
-      db,
-      "exhibition_artworks",
-      exhibitionId,
-      "artworks",
-      artworkId
-    );
-
-    await Promise.all([deleteDoc(userRef), deleteDoc(centralRef)]);
-
-    removeArtworkFromState(exhibitionId, artworkId);
-  };
-
-  const removeArtworkFromState = (exhibitionId, artworkId) => {
     setPendingGrouped((prev) => {
       const updated = { ...prev };
       updated[exhibitionId].artworks = updated[exhibitionId].artworks.filter(
@@ -437,45 +409,21 @@ const AdminPendingArtworks = () => {
                       <strong>מחיר:</strong> {art.price || "—"}
                     </p>
                     <div className="flex gap-2">
-                      {!art.approved && (
-                        <button
-                          onClick={() =>
-                            handleApproval(
-                              selectedExhibition,
-                              art.id,
-                              art.userId
-                            )
-                          }
-                          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
-                        >
-                          ✔️ אשר יצירה
-                        </button>
-                      )}
-                      {!art.rejected && (
-                        <button
-                          onClick={() =>
-                            handleRejection(
-                              selectedExhibition,
-                              art.id,
-                              art.userId
-                            )
-                          }
-                          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded-lg"
-                        >
-                          ❌ דחה
-                        </button>
-                      )}
                       <button
                         onClick={() =>
-                          handlePermanentDelete(
-                            selectedExhibition,
-                            art.id,
-                            art.userId
-                          )
+                          handleApproval(selectedExhibition, art.id, art.userId)
                         }
-                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg"
+                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
                       >
-                        🗑️ מחק לצמיתות
+                        ✔️ אשר
+                      </button>
+                      <button
+                        onClick={() =>
+                          handleDelete(selectedExhibition, art.id, art.userId)
+                        }
+                        className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg"
+                      >
+                        ❌ מחק
                       </button>
                     </div>
                   </div>
