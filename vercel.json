@@ -5,12 +5,7 @@
       "maxDuration": 300
     }
   },
-  "crons": [
-    {
-      "path": "/api/sync",
-      "schedule": "45 10 * * *"
-    }
-  ],
+
   "rewrites": [
     {
       "source": "/(.*)",
