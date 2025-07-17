@@ -22,10 +22,7 @@ const withCorsProxy = (url) =>
 const isRemote = (url) => /^https?:\/\//.test(url);
 
 const AllArtworksByExhibition = () => {
-<<<<<<< HEAD
-=======
-  console.log('DEBUG: AllArtworksByExhibition rendered');
->>>>>>> master
+  console.log("DEBUG: AllArtworksByExhibition rendered");
   const [exhibitions, setExhibitions] = useState([]);
   const [selectedExId, setSelectedExId] = useState(null);
   const [selectedArtworks, setSelectedArtworks] = useState([]);
@@ -38,10 +35,7 @@ const AllArtworksByExhibition = () => {
   const tableRefMulti = useRef();
   const tableRefSingle = useRef();
   const logob = "/logob.png";
-<<<<<<< HEAD
-=======
   const artistRefs = useRef({});
->>>>>>> master
 
   useEffect(() => {
     const fetchExhibitions = async () => {
@@ -254,8 +248,6 @@ const AllArtworksByExhibition = () => {
     pdf.save(`${title}-artworks.pdf`);
   };
 
-<<<<<<< HEAD
-=======
   const generateAllArtistsPDF = async () => {
     const uniqueArtists = getUniqueArtists();
     console.log("Unique artists:", uniqueArtists);
@@ -273,13 +265,12 @@ const AllArtworksByExhibition = () => {
       if (!ref) continue;
       const images = ref.querySelectorAll("img");
       await Promise.all(
-        Array.from(images).map(
-          (img) =>
-            img.complete
-              ? Promise.resolve()
-              : new Promise((res) => {
-                  img.onload = img.onerror = res;
-                })
+        Array.from(images).map((img) =>
+          img.complete
+            ? Promise.resolve()
+            : new Promise((res) => {
+                img.onload = img.onerror = res;
+              })
         )
       );
       const canvas = await html2canvas(ref, {
@@ -296,7 +287,6 @@ const AllArtworksByExhibition = () => {
     pdf.save("all-artists.pdf");
   };
 
->>>>>>> master
   const currentEx = exhibitions.find((e) => e.id === selectedExId);
   const isSingleArtistEx = currentEx?.forSingleArtist;
 
@@ -459,17 +449,16 @@ const AllArtworksByExhibition = () => {
   //     console.error("❌ Failed to generate Word file:", err);
   //   }
   // };
-<<<<<<< HEAD
-=======
   const getUniqueArtists = () => {
     const unique = [];
     const seen = new Set();
     selectedArtworks.forEach((art) => {
-      const artist = art.userId && art.artist
-        ? art.artist
-        : typeof art.artist === "string"
-        ? { name: art.artist }
-        : art.artist;
+      const artist =
+        art.userId && art.artist
+          ? art.artist
+          : typeof art.artist === "string"
+          ? { name: art.artist }
+          : art.artist;
       // Use a unique key for each artist (uid, email, or name as fallback)
       const uniqueKey = artist?.uid || artist?.email || artist?.name;
       if (artist && uniqueKey && !seen.has(uniqueKey)) {
@@ -479,7 +468,6 @@ const AllArtworksByExhibition = () => {
     });
     return unique;
   };
->>>>>>> master
   return (
     <div className="min-h-screen bg-gradient-to-br py-10 px-4" dir="rtl">
       <h1 className="text-4xl font-extrabold text-center text-pink-700 mb-12 drop-shadow">
@@ -506,15 +494,10 @@ const AllArtworksByExhibition = () => {
       {/* Action Buttons */}
       <div className="text-center mb-10 space-y-4 gap-3">
         <button
-<<<<<<< HEAD
-          onClick={async () => {
-            for (const art of selectedArtworks) {
-              await generatePDF(art);
-            }
+          onClick={() => {
+            console.log("PINK BUTTON CLICKED");
+            generateAllArtistsPDF();
           }}
-=======
-          onClick={() => { console.log("PINK BUTTON CLICKED"); generateAllArtistsPDF(); }}
->>>>>>> master
           className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow transition m-4"
         >
           הורד את כל ה-PDFים
@@ -539,150 +522,6 @@ const AllArtworksByExhibition = () => {
           טוען נתונים...
         </p>
       ) : selectedArtworks.length > 0 ? (
-<<<<<<< HEAD
-        <div className="px-2 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-10 max-w-screen-xl mx-auto">
-            {/* Existing cards remain unchanged */}
-            {selectedArtworks.map((art) => {
-              const reg = registrations[art.id];
-              const artist =
-                art.userId && art.artist
-                  ? art.artist
-                  : typeof art.artist === "string"
-                  ? { name: art.artist }
-                  : art.artist || { name: "הוספה ע״י מנהל" };
-
-              const imageSrc = artist.image || "/placeholder.jpg";
-              const imageForPDF = /^https?:\/\//.test(imageSrc)
-                ? `https://corsproxy.io/?${encodeURIComponent(imageSrc)}`
-                : imageSrc;
-
-              return (
-                <div
-                  key={art.id}
-                  className="bg-white rounded-3xl shadow-2xl border border-pink-100 overflow-hidden hover:shadow-2xl transform hover:scale-[1.05] hover:-translate-y-1 transition duration-300 w-full max-w-[350px] mx-auto"
-                >
-                  <img
-                    src={art.imageUrl}
-                    alt={art.artworkName}
-                    onError={(e) => (e.target.src = "/placeholder.jpg")}
-                    className="w-full h-64 object-cover rounded-t-3xl"
-                  />
-                  <div className="p-6 space-y-3 text-base">
-                    {/* <h3 className="text-xl font-bold text-pink-700">
-                      {art.artworkName || "ללא שם"}
-                    </h3> */}
-                    <h3 className="text-xl font-bold text-pink-700">
-                      {art.userId
-                        ? art.artworkName || "ללא שם"
-                        : art.name || "ללא שם"}
-                    </h3>
-                    {/* 
-                    <p>
-                      <span className="font-bold">אמן:</span>{" "}
-                      {artist.name || "לא ידוע"}
-                    </p> */}
-                    <p>
-                      <span className="font-bold">אמן:</span>{" "}
-                      {art.userId
-                        ? artist.name || "לא ידוע"
-                        : typeof art.artist === "string"
-                        ? art.artist
-                        : art.artist?.name || "הוספה ע״י מנהל"}
-                    </p>
-
-                    <p>
-                      <span className="font-bold">תיאור:</span>{" "}
-                      {art.description || "אין תיאור"}
-                    </p>
-                    <p>
-                      <span className="font-bold">שנה:</span> {art.year || "-"}
-                    </p>
-                    <button
-                      onClick={() => generatePDF(art)}
-                      className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl shadow"
-                    >
-                      הורד פרופיל PDF
-                    </button>
-                  </div>
-
-                  {/* PDF Layout (hidden) */}
-                  <div
-                    ref={(el) => (printRefs.current[art.id] = el)}
-                    style={{ position: "absolute", left: "-9999px", top: 0 }}
-                    className="text-black bg-white w-[794px] h-[1123px] overflow-hidden"
-                  >
-                    <img
-                      src="/up.jpg"
-                      alt="Header"
-                      className="w-full"
-                      crossOrigin="anonymous"
-                    />
-                    <div className="px-10 py-6 text-right font-sans">
-                      <h2 className="text-3xl font-bold mb-2">
-                        {artist.name || "יצירה ללא שם אמן"}
-                      </h2>
-
-                      {(reg?.place || artist.place) && (
-                        <p className="text-lg mb-4">
-                          {reg?.place || artist.place}
-                        </p>
-                      )}
-
-                      {(artist.image || reg?.image) && (
-                        <div className="flex gap-6 mb-4">
-                          <img
-                            src={imageForPDF}
-                            alt="Artist"
-                            className="w-48 h-48 object-cover rounded-xl border shadow"
-                            crossOrigin="anonymous"
-                          />
-
-                          {(reg?.email ||
-                            reg?.phone ||
-                            reg?.link ||
-                            artist.email ||
-                            artist.phone ||
-                            artist.link) && (
-                            <div className="flex flex-col justify-center text-right text-blue-600 text-lg ">
-                              {(reg?.phone || artist.phone) && (
-                                <a href={`tel:${reg?.phone || artist.phone}`}>
-                                  {reg?.phone || artist.phone}
-                                </a>
-                              )}
-
-                              {(reg?.email || artist.email) && (
-                                <a
-                                  className="p-3"
-                                  href={`mailto:${reg?.email || artist.email}`}
-                                >
-                                  {reg?.email || artist.email}
-                                </a>
-                              )}
-                              {(reg?.link || artist.link) && (
-                                <QRCodeCanvas
-                                  value={reg?.link || artist.link}
-                                  size={100}
-                                />
-                              )}
-                            </div>
-                          )}
-                        </div>
-                      )}
-
-                      <p className="whitespace-pre-line text-[16px] leading-relaxed mt-6">
-                        {reg?.bio ||
-                          artist.bio ||
-                          "לא קיימת ביוגרפיה זמינה ליצירה זו."}
-                      </p>
-                    </div>
-                    <img
-                      src="/down.jpg"
-                      alt="Footer"
-                      className="w-full absolute bottom-0 left-0"
-                      crossOrigin="anonymous"
-                    />
-=======
         <>
           <div className="px-2 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-10 max-w-screen-xl mx-auto">
@@ -740,7 +579,8 @@ const AllArtworksByExhibition = () => {
                         {art.description || "אין תיאור"}
                       </p>
                       <p>
-                        <span className="font-bold">שנה:</span> {art.year || "-"}
+                        <span className="font-bold">שנה:</span>{" "}
+                        {art.year || "-"}
                       </p>
                       <button
                         onClick={() => generatePDF(art)}
@@ -798,7 +638,9 @@ const AllArtworksByExhibition = () => {
                                 {(reg?.email || artist.email) && (
                                   <a
                                     className="p-3"
-                                    href={`mailto:${reg?.email || artist.email}`}
+                                    href={`mailto:${
+                                      reg?.email || artist.email
+                                    }`}
                                   >
                                     {reg?.email || artist.email}
                                   </a>
@@ -834,7 +676,7 @@ const AllArtworksByExhibition = () => {
           </div>
           {/* Always render the hidden label container for PDF export */}
           {/* Pixel-perfect business card style for PDF export */}
-          {console.log('DEBUG: selectedArtworks for labels', selectedArtworks)}
+          {console.log("DEBUG: selectedArtworks for labels", selectedArtworks)}
           <style>{`
             #labels-pdf-container {
               display: grid;
@@ -913,38 +755,42 @@ const AllArtworksByExhibition = () => {
           `}</style>
           <div id="labels-pdf-container">
             {selectedArtworks.map((art) => {
-              const artist = art.userId && art.artist
-                ? art.artist
-                : typeof art.artist === "string"
-                ? { name: art.artist }
-                : art.artist || { name: "הוספה ע\"י מנהל" };
-              console.log('DEBUG: label card', { art, artist });
+              const artist =
+                art.userId && art.artist
+                  ? art.artist
+                  : typeof art.artist === "string"
+                  ? { name: art.artist }
+                  : art.artist || { name: 'הוספה ע"י מנהל' };
+              console.log("DEBUG: label card", { art, artist });
               return (
                 <div className="label-card" key={art.id}>
                   <div className="logo-row">
                     <img src="/logob.png" alt="Logo" />
                     <div className="artist-name">{artist.name}</div>
                   </div>
-                  <div className="artwork-name">{art.artworkName || art.name || "-"}</div>
+                  <div className="artwork-name">
+                    {art.artworkName || art.name || "-"}
+                  </div>
                   <div className="contact-info">
-                    <span style={{ marginLeft: 8, direction: "ltr" }}>{artist.email || "-"}</span>
-                    <span style={{ direction: "ltr" }}>{artist.phone || "-"}</span>
+                    <span style={{ marginLeft: 8, direction: "ltr" }}>
+                      {artist.email || "-"}
+                    </span>
+                    <span style={{ direction: "ltr" }}>
+                      {artist.phone || "-"}
+                    </span>
                   </div>
                   <div className="details-row">
                     <span style={{ marginLeft: 8 }}>{art.size || "-"}</span>
-                    <span style={{ marginLeft: 8 }}>{art.technique || "-"}</span>
+                    <span style={{ marginLeft: 8 }}>
+                      {art.technique || "-"}
+                    </span>
                     <span>מחיר: {art.price || "לפנות לאמן"}</span>
->>>>>>> master
                   </div>
                 </div>
               );
             })}
           </div>
-<<<<<<< HEAD
-        </div>
-=======
         </>
->>>>>>> master
       ) : (
         <div className="text-center text-gray-600 text-lg font-semibold mt-12">
           לא נמצאו יצירות לתערוכה זו 🎨
@@ -1155,42 +1001,70 @@ const AllArtworksByExhibition = () => {
           </div>
         </div>
       )}
-<<<<<<< HEAD
-=======
       {/* Hidden printable artist profiles for PDF generation */}
       <div style={{ position: "absolute", left: "-9999px", top: 0 }}>
         {getUniqueArtists().map((artist) => (
           <div
             key={artist.uid || artist.email || artist.name}
-            ref={(el) => (artistRefs.current[artist.uid || artist.email || artist.name] = el)}
+            ref={(el) =>
+              (artistRefs.current[artist.uid || artist.email || artist.name] =
+                el)
+            }
             className="text-black bg-white w-[794px] h-[1123px] overflow-hidden"
           >
-            <img src="/up.jpg" alt="Header" className="w-full" crossOrigin="anonymous" />
+            <img
+              src="/up.jpg"
+              alt="Header"
+              className="w-full"
+              crossOrigin="anonymous"
+            />
             <div className="px-10 py-6 text-right font-sans">
-              <h2 className="text-3xl font-bold mb-2">{artist.name || "יצירה ללא שם אמן"}</h2>
+              <h2 className="text-3xl font-bold mb-2">
+                {artist.name || "יצירה ללא שם אמן"}
+              </h2>
               {artist.place && <p className="text-lg mb-4">{artist.place}</p>}
               {artist.image && (
                 <div className="flex gap-6 mb-4">
                   <img
-                    src={/^https?:\/\//.test(artist.image) ? `https://corsproxy.io/?${encodeURIComponent(artist.image)}` : artist.image}
+                    src={
+                      /^https?:\/\//.test(artist.image)
+                        ? `https://corsproxy.io/?${encodeURIComponent(
+                            artist.image
+                          )}`
+                        : artist.image
+                    }
                     alt="Artist"
                     className="w-48 h-48 object-cover rounded-xl border shadow"
                     crossOrigin="anonymous"
                   />
                   <div className="flex flex-col justify-center text-right text-blue-600 text-lg ">
-                    {artist.phone && <a href={`tel:${artist.phone}`}>{artist.phone}</a>}
-                    {artist.email && <a className="p-3" href={`mailto:${artist.email}`}>{artist.email}</a>}
-                    {artist.link && <QRCodeCanvas value={artist.link} size={100} />}
+                    {artist.phone && (
+                      <a href={`tel:${artist.phone}`}>{artist.phone}</a>
+                    )}
+                    {artist.email && (
+                      <a className="p-3" href={`mailto:${artist.email}`}>
+                        {artist.email}
+                      </a>
+                    )}
+                    {artist.link && (
+                      <QRCodeCanvas value={artist.link} size={100} />
+                    )}
                   </div>
                 </div>
               )}
-              <p className="whitespace-pre-line text-[16px] leading-relaxed mt-6">{artist.bio || "לא קיימת ביוגרפיה זמינה ליצירה זו."}</p>
+              <p className="whitespace-pre-line text-[16px] leading-relaxed mt-6">
+                {artist.bio || "לא קיימת ביוגרפיה זמינה ליצירה זו."}
+              </p>
             </div>
-            <img src="/down.jpg" alt="Footer" className="w-full absolute bottom-0 left-0" crossOrigin="anonymous" />
+            <img
+              src="/down.jpg"
+              alt="Footer"
+              className="w-full absolute bottom-0 left-0"
+              crossOrigin="anonymous"
+            />
           </div>
         ))}
       </div>
->>>>>>> master
     </div>
   );
 };
