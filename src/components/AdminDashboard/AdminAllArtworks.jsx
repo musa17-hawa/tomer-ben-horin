@@ -308,147 +308,7 @@ const AllArtworksByExhibition = () => {
     textAlign: "center",
     verticalAlign: "middle",
   };
-  // const handleDownloadLabels = async () => {
-  //   if (!selectedArtworks.length) return;
 
-  //   const doc = new Document();
-
-  //   const logoArrayBuffer = await fetch(logob).then((res) => res.arrayBuffer());
-  //   const logoImage = Media.addImage(doc, logoArrayBuffer, 100, 50);
-
-  //   // selectedArtworks.forEach((art, idx) => {
-  //   //   const artistName =
-  //   //     art.artist?.name || "הוספה ע" + String.fromCharCode(8221) + "י מנהל";
-  //   //   const name = art.artworkName || art.name || "";
-  //   //   const size = art.size || "";
-  //   //   const technique = art.technique || "";
-  //   //   const price = art.price || "";
-
-  //   //   doc.addSection({
-  //   //     children: [
-  //   //       new Paragraph({
-  //   //         children: [
-  //   //           logoImage,
-  //   //           new TextRun({ text: "\n\nשם האמן: " + artistName, bold: true }),
-  //   //           new TextRun("\nשם היצירה: " + name),
-  //   //           new TextRun("\nגודל: " + size),
-  //   //           new TextRun("\nטכניקה: " + technique),
-  //   //           new TextRun(
-  //   //             "\nמחיר: " + price + " ש" + String.fromCharCode(8222)
-  //   //           ),
-  //   //           new TextRun("\n_________________________\n\n\n"),
-  //   //         ],
-  //   //       }),
-  //   //     ],
-  //   //   });
-  //   // });
-  //   selectedArtworks.forEach((art, idx) => {
-  //     const artistName =
-  //       art.artist?.name || "הוספה ע" + String.fromCharCode(8221) + "י מנהל";
-  //     const name = art.artworkName || art.name || "";
-  //     const size = art.size || "";
-  //     const technique = art.technique || "";
-  //     const price = art.price || "";
-  //     const year = art.year || "-";
-  //     const desc = art.description || "-";
-
-  //     const isSingle = isSingleArtistEx;
-
-  //     const children = isSingle
-  //       ? [
-  //           logoImage,
-  //           new TextRun({ text: "\n\nשם היצירה: " + name, bold: true }),
-  //           new TextRun("\nשנה: " + year),
-  //           new TextRun("\nגודל: " + size),
-  //           new TextRun("\nתיאור: " + desc),
-  //           new TextRun("\nטכניקה: " + technique),
-  //           new TextRun("\nמחיר: " + price + " ש" + String.fromCharCode(8222)),
-  //           new TextRun("\n_________________________\n\n\n"),
-  //         ]
-  //       : [
-  //           logoImage,
-  //           new TextRun({ text: "\n\nשם האמן: " + artistName, bold: true }),
-  //           new TextRun("\nשם היצירה: " + name),
-  //           new TextRun("\nגודל: " + size),
-  //           new TextRun("\nטכניקה: " + technique),
-  //           new TextRun("\nמחיר: " + price + " ש" + String.fromCharCode(8222)),
-  //           new TextRun("\n_________________________\n\n\n"),
-  //         ];
-
-  //     doc.addSection({
-  //       children: [new Paragraph({ children })],
-  //     });
-  //   });
-
-  //   const blob = await Packer.toBlob(doc);
-  //   saveAs(blob, `${currentEx?.title || "labels"}-labels.docx`);
-  // };
-
-  // const handleDownloadLabels = async () => {
-  //   if (!selectedArtworks.length) return;
-
-  //   const sections = [];
-
-  //   for (const art of selectedArtworks) {
-  //     const artistName = art.artist?.name || "הוספה ע״י מנהל";
-  //     const name = art.artworkName || art.name || "ללא שם";
-  //     const size = art.size || "-";
-  //     const technique = art.technique || "-";
-  //     const price = art.price || "-";
-  //     const year = art.year || "-";
-  //     const desc = art.description || "-";
-  //     const isSingle = isSingleArtistEx;
-
-  //     let logoImage;
-  //     try {
-  //       const res = await fetch("/logob.png");
-  //       if (!res.ok) throw new Error("Logo fetch failed");
-  //       const arrayBuffer = await res.arrayBuffer();
-  //       // Note: We'll add the image to the document later
-  //     } catch (err) {
-  //       console.warn("⚠️ Failed to load logo image:", err);
-  //     }
-
-  //     const children = [
-  //       ...(isSingle
-  //         ? [
-  //             new TextRun({ text: "\n\nשם היצירה: " + name, bold: true }),
-  //             new TextRun({ text: "\nשנה: " + year }),
-  //             new TextRun({ text: "\nגודל: " + size }),
-  //             new TextRun({ text: "\nתיאור: " + desc }),
-  //             new TextRun({ text: "\nטכניקה: " + technique }),
-  //             new TextRun({ text: "\nמחיר: " + price + " ש״ח" }),
-  //           ]
-  //         : [
-  //             new TextRun({ text: "\n\nשם האמן: " + artistName, bold: true }),
-  //             new TextRun({ text: "\nשם היצירה: " + name }),
-  //             new TextRun({ text: "\nגודל: " + size }),
-  //             new TextRun({ text: "\nטכניקה: " + technique }),
-  //             new TextRun({ text: "\nמחיר: " + price + " ש״ח" }),
-  //           ]),
-  //       new TextRun({ text: "\n_________________________\n\n\n" }),
-  //     ];
-
-  //     sections.push({
-  //       children: [new Paragraph({ children })],
-  //     });
-  //   }
-
-  //   // Create document with sections in constructor
-  //   const doc = new Document({
-  //     creator: "Art Exhibition System",
-  //     title: `${currentEx?.title || "Exhibition"} Labels`,
-  //     sections: sections,
-  //   });
-
-  //   try {
-  //     const blob = await Packer.toBlob(doc);
-  //     const title = currentEx?.title || "labels";
-  //     saveAs(blob, `${title}-labels.docx`);
-  //   } catch (err) {
-  //     console.error("❌ Failed to generate Word file:", err);
-  //   }
-  // };
   const getUniqueArtists = () => {
     const unique = [];
     const seen = new Set();
@@ -863,15 +723,26 @@ const AllArtworksByExhibition = () => {
               </thead>
               <tbody>
                 {selectedArtworks.map((art, index) => (
-                  <tr key={art.id}>
+                  <tr key={art.id} style={{ verticalAlign: "middle" }}>
                     <td style={cellStyle}>
-                      <img
+                      {/* <img
                         src={art.imageUrl}
                         alt="art"
                         style={{
                           width: "100px",
                           height: "100px",
                           objectFit: "cover",
+                        }}
+                      /> */}
+                      <img
+                        src={art.imageUrl}
+                        alt="art"
+                        style={{
+                          maxHeight: "100px",
+                          maxWidth: "100px",
+                          objectFit: "contain",
+                          display: "block",
+                          margin: "0 auto",
                         }}
                       />
                     </td>
@@ -975,15 +846,26 @@ const AllArtworksByExhibition = () => {
               </thead>
               <tbody>
                 {selectedArtworks.map((art, index) => (
-                  <tr key={art.id}>
+                  <tr key={art.id} style={{ verticalAlign: "middle" }}>
                     <td style={cellStyle}>
-                      <img
+                      {/* <img
                         src={art.imageUrl}
                         alt="art"
                         style={{
                           width: "100px",
                           height: "100px",
                           objectFit: "cover",
+                        }}
+                      /> */}
+                      <img
+                        src={art.imageUrl}
+                        alt="art"
+                        style={{
+                          maxHeight: "100px",
+                          maxWidth: "100px",
+                          objectFit: "contain",
+                          display: "block",
+                          margin: "0 auto",
                         }}
                       />
                     </td>
