@@ -9,6 +9,7 @@ const LoginSignup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleLogin = async () => {
     try {
@@ -66,14 +67,31 @@ const LoginSignup = () => {
               className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#fd3470] text-right"
               required
             />
-            <input
+            {/* <input
               type="password"
               placeholder="סיסמה"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#fd3470] text-right"
               required
-            />
+            /> */}
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="סיסמה"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#fd3470] text-right pr-12"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute top-1/2 right-3 transform -translate-y-1/2 text-sm text-gray-500"
+              >
+                {showPassword ? "🙈" : "👁"}
+              </button>
+            </div>
 
             {error && (
               <p className="text-red-600 text-sm text-center font-medium">
