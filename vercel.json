@@ -1,0 +1,20 @@
+{
+  "functions": {
+    "api/sync.js": {
+      "memory": 1024,
+      "maxDuration": 300
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/sync",
+      "schedule": "45 10 * * *"
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/"
+    }
+  ]
+}
