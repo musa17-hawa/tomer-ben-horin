@@ -671,7 +671,6 @@ const AllArtworksByExhibition = () => {
               direction: "rtl",
             }}
           >
-            {/* Logo at the top */}
             <img
               src="/logob.png"
               alt="Logo"
@@ -725,7 +724,12 @@ const AllArtworksByExhibition = () => {
                 {selectedArtworks.map((art, index) => (
                   <tr
                     key={art.id}
-                    style={{ height: "120px", verticalAlign: "middle" }}
+                    style={{
+                      height: "120px",
+                      verticalAlign: "middle",
+                      breakInside: "avoid",
+                      pageBreakInside: "avoid",
+                    }}
                   >
                     <td
                       style={{
@@ -739,7 +743,7 @@ const AllArtworksByExhibition = () => {
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
-                          height: "100px",
+                          height: "80px",
                           width: "100px",
                           overflow: "hidden",
                           margin: "0 auto",
@@ -771,7 +775,6 @@ const AllArtworksByExhibition = () => {
                         ? art.artist
                         : art.artist?.name || "הוספה ע״י מנהל"}
                     </td>
-
                     <td style={cellStyle}>
                       {art.phone || art.artist?.phone || "-"}
                     </td>
@@ -783,6 +786,7 @@ const AllArtworksByExhibition = () => {
           </div>
         </div>
       )}
+
       {/* Hidden printable single-artist layout */}
       {isSingleArtistEx && (
         <div
