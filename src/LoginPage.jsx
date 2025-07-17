@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { auth, db } from "./firebase/config"; // Adjust path if needed
+import { sendPasswordResetEmail } from "firebase/auth";
 
 const LoginSignup = () => {
   const [email, setEmail] = useState("");
@@ -78,7 +79,7 @@ const LoginSignup = () => {
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
-                placeholder="סיסמה"
+                placeholder="שם משתמש"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-5 py-3 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#fd3470] text-right pr-12"
@@ -105,6 +106,27 @@ const LoginSignup = () => {
             >
               התחבר
             </button>
+            <div className="text-center">
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!email) {
+                    setError("אנא הזן אימייל לפני שליחת קישור איפוס.");
+                    return;
+                  }
+                  try {
+                    await sendPasswordResetEmail(auth, email);
+                    alert("קישור לאיפוס סיסמה נשלח לאימייל שלך.");
+                  } catch (err) {
+                    console.error(err);
+                    setError("שליחת קישור נכשלה. ודא שהאימייל תקין.");
+                  }
+                }}
+                className="text-[#fd3470] hover:underline text-sm"
+              >
+                שכחת את השם שלך? לחץ כאן לאיפוס סיסמה
+              </button>
+            </div>
           </form>
 
           <div className="mt-6 text-sm text-center text-gray-700">
