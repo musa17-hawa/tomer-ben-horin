@@ -723,28 +723,41 @@ const AllArtworksByExhibition = () => {
               </thead>
               <tbody>
                 {selectedArtworks.map((art, index) => (
-                  <tr key={art.id} style={{ verticalAlign: "middle" }}>
-                    <td style={cellStyle}>
-                      {/* <img
-                        src={art.imageUrl}
-                        alt="art"
+                  <tr
+                    key={art.id}
+                    style={{ height: "120px", verticalAlign: "middle" }}
+                  >
+                    <td
+                      style={{
+                        ...cellStyle,
+                        width: "120px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <div
                         style={{
-                          width: "100px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
                           height: "100px",
-                          objectFit: "cover",
-                        }}
-                      /> */}
-                      <img
-                        src={art.imageUrl}
-                        alt="art"
-                        style={{
-                          maxHeight: "100px",
-                          maxWidth: "100px",
-                          objectFit: "contain",
-                          display: "block",
+                          width: "100px",
+                          overflow: "hidden",
                           margin: "0 auto",
+                          borderRadius: "6px",
+                          border: "1px solid #ddd",
                         }}
-                      />
+                      >
+                        <img
+                          src={art.imageUrl}
+                          alt="art"
+                          style={{
+                            maxHeight: "100%",
+                            maxWidth: "100%",
+                            objectFit: "contain",
+                            display: "block",
+                          }}
+                        />
+                      </div>
                     </td>
                     <td style={cellStyle}>{art.size || "-"}</td>
                     <td style={cellStyle}>{art.technique || "-"}</td>
