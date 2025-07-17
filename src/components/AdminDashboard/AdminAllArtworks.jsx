@@ -500,7 +500,7 @@ const AllArtworksByExhibition = () => {
           }}
           className="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-6 rounded-full shadow transition m-4"
         >
-          הורד את כל ה-PDFים
+          הורד את כל דפי האמנים
         </button>
 
         <button
@@ -586,7 +586,7 @@ const AllArtworksByExhibition = () => {
                         onClick={() => generatePDF(art)}
                         className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white text-sm font-semibold py-2.5 rounded-xl shadow"
                       >
-                        הורד פרופיל PDF
+                        דף האמן{" "}
                       </button>
                     </div>
 

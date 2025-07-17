@@ -6,6 +6,7 @@
 //   const [pendingGrouped, setPendingGrouped] = useState({});
 //   const [loading, setLoading] = useState(true);
 //   const [selectedExhibition, setSelectedExhibition] = useState(null);
+//   const [zoomedImage, setZoomedImage] = useState(null); // for full-screen image
 
 //   useEffect(() => {
 //     const fetchGroupedArtworks = async () => {
@@ -81,6 +82,44 @@
 //       return updated;
 //     });
 //   };
+//   const handleRejection = async (exhibitionId, artworkId, userId) => {
+//     const confirm = window.confirm("האם אתה בטוח שברצונך לדחות יצירה זו?");
+//     if (!confirm) return;
+
+//     const userRef = doc(
+//       db,
+//       "users",
+//       userId,
+//       "registrations",
+//       exhibitionId,
+//       "artworks",
+//       artworkId
+//     );
+//     const centralRef = doc(
+//       db,
+//       "exhibition_artworks",
+//       exhibitionId,
+//       "artworks",
+//       artworkId
+//     );
+
+//     await Promise.all([
+//       updateDoc(userRef, { rejected: true }),
+//       updateDoc(centralRef, { rejected: true }),
+//     ]);
+
+//     setPendingGrouped((prev) => {
+//       const updated = { ...prev };
+//       updated[exhibitionId].artworks = updated[exhibitionId].artworks.filter(
+//         (a) => a.id !== artworkId
+//       );
+//       if (updated[exhibitionId].artworks.length === 0) {
+//         delete updated[exhibitionId];
+//         setSelectedExhibition(null);
+//       }
+//       return updated;
+//     });
+//   };
 
 //   return (
 //     <div className="max-w-7xl mx-auto px-4 py-10" dir="rtl">
@@ -120,7 +159,9 @@
 //                   <img
 //                     src={art.imageUrl}
 //                     alt={art.artworkName}
-//                     className="w-full h-52 object-cover rounded-t-xl"
+//                     onClick={() => setZoomedImage(art.imageUrl)}
+//                     className="w-full h-52 object-cover rounded-t-xl cursor-pointer"
+//                     title="לחץ להגדלה"
 //                   />
 //                   <div className="p-4">
 //                     <h3 className="text-lg font-bold text-pink-600">
@@ -138,20 +179,47 @@
 //                     <p className="text-sm text-gray-600 mb-3">
 //                       <strong>מחיר:</strong> {art.price || "—"}
 //                     </p>
-//                     <button
-//                       onClick={() =>
-//                         handleApproval(selectedExhibition, art.id, art.userId)
-//                       }
-//                       className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
-//                     >
-//                       ✔️ אשר יצירה
-//                     </button>
+//                     <div className="flex gap-2">
+//                       <button
+//                         onClick={() =>
+//                           handleApproval(selectedExhibition, art.id, art.userId)
+//                         }
+//                         className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
+//                       >
+//                         ✔️ אשר יצירה
+//                       </button>
+//                       <button
+//                         onClick={() =>
+//                           handleRejection(
+//                             selectedExhibition,
+//                             art.id,
+//                             art.userId
+//                           )
+//                         }
+//                         className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg"
+//                       >
+//                         ❌ דחה
+//                       </button>
+//                     </div>
 //                   </div>
 //                 </div>
 //               ))}
 //             </div>
 //           )}
 //         </>
+//       )}
+
+//       {zoomedImage && (
+//         <div
+//           className="fixed inset-0 z-50 bg-black bg-opacity-90 flex items-center justify-center"
+//           onClick={() => setZoomedImage(null)}
+//         >
+//           <img
+//             src={zoomedImage}
+//             alt="Zoomed"
+//             className="max-w-full max-h-full rounded-xl shadow-lg border-4 border-white"
+//           />
+//         </div>
 //       )}
 //     </div>
 //   );
@@ -160,13 +228,19 @@
 // export default AdminPendingArtworks;
 import React, { useEffect, useState } from "react";
 import { db } from "../../firebase/config";
-import { collection, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
 const AdminPendingArtworks = () => {
   const [pendingGrouped, setPendingGrouped] = useState({});
   const [loading, setLoading] = useState(true);
   const [selectedExhibition, setSelectedExhibition] = useState(null);
-  const [zoomedImage, setZoomedImage] = useState(null); // for full-screen image
+  const [zoomedImage, setZoomedImage] = useState(null);
 
   useEffect(() => {
     const fetchGroupedArtworks = async () => {
@@ -184,7 +258,7 @@ const AdminPendingArtworks = () => {
           );
           const filtered = artworksSnap.docs
             .map((doc) => ({ id: doc.id, ...doc.data() }))
-            .filter((a) => !a.approved && !a.addedByAdmin);
+            .filter((a) => !a.approved && !a.addedByAdmin); // keep rejected too
 
           if (filtered.length > 0) {
             pending[exhibition.id] = {
@@ -230,18 +304,9 @@ const AdminPendingArtworks = () => {
       updateDoc(centralRef, { approved: true }),
     ]);
 
-    setPendingGrouped((prev) => {
-      const updated = { ...prev };
-      updated[exhibitionId].artworks = updated[exhibitionId].artworks.filter(
-        (a) => a.id !== artworkId
-      );
-      if (updated[exhibitionId].artworks.length === 0) {
-        delete updated[exhibitionId];
-        setSelectedExhibition(null);
-      }
-      return updated;
-    });
+    removeArtworkFromState(exhibitionId, artworkId);
   };
+
   const handleRejection = async (exhibitionId, artworkId, userId) => {
     const confirm = window.confirm("האם אתה בטוח שברצונך לדחות יצירה זו?");
     if (!confirm) return;
@@ -268,6 +333,38 @@ const AdminPendingArtworks = () => {
       updateDoc(centralRef, { rejected: true }),
     ]);
 
+    removeArtworkFromState(exhibitionId, artworkId);
+  };
+
+  const handlePermanentDelete = async (exhibitionId, artworkId, userId) => {
+    const confirm = window.confirm(
+      "האם אתה בטוח שברצונך למחוק לצמיתות את היצירה?"
+    );
+    if (!confirm) return;
+
+    const userRef = doc(
+      db,
+      "users",
+      userId,
+      "registrations",
+      exhibitionId,
+      "artworks",
+      artworkId
+    );
+    const centralRef = doc(
+      db,
+      "exhibition_artworks",
+      exhibitionId,
+      "artworks",
+      artworkId
+    );
+
+    await Promise.all([deleteDoc(userRef), deleteDoc(centralRef)]);
+
+    removeArtworkFromState(exhibitionId, artworkId);
+  };
+
+  const removeArtworkFromState = (exhibitionId, artworkId) => {
     setPendingGrouped((prev) => {
       const updated = { ...prev };
       updated[exhibitionId].artworks = updated[exhibitionId].artworks.filter(
@@ -340,25 +437,45 @@ const AdminPendingArtworks = () => {
                       <strong>מחיר:</strong> {art.price || "—"}
                     </p>
                     <div className="flex gap-2">
+                      {!art.approved && (
+                        <button
+                          onClick={() =>
+                            handleApproval(
+                              selectedExhibition,
+                              art.id,
+                              art.userId
+                            )
+                          }
+                          className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
+                        >
+                          ✔️ אשר יצירה
+                        </button>
+                      )}
+                      {!art.rejected && (
+                        <button
+                          onClick={() =>
+                            handleRejection(
+                              selectedExhibition,
+                              art.id,
+                              art.userId
+                            )
+                          }
+                          className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 rounded-lg"
+                        >
+                          ❌ דחה
+                        </button>
+                      )}
                       <button
                         onClick={() =>
-                          handleApproval(selectedExhibition, art.id, art.userId)
-                        }
-                        className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 rounded-lg"
-                      >
-                        ✔️ אשר יצירה
-                      </button>
-                      <button
-                        onClick={() =>
-                          handleRejection(
+                          handlePermanentDelete(
                             selectedExhibition,
                             art.id,
                             art.userId
                           )
                         }
-                        className="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg"
+                        className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 rounded-lg"
                       >
-                        ❌ דחה
+                        🗑️ מחק לצמיתות
                       </button>
                     </div>
                   </div>
