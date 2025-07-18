@@ -302,11 +302,22 @@ const AllArtworksByExhibition = () => {
       return "-";
     }
   };
+  // const cellStyle = {
+  //   border: "1px solid #ddd",
+  //   padding: "8px",
+  //   textAlign: "center",
+  //   verticalAlign: "middle",
+  // };
   const cellStyle = {
     border: "1px solid #ddd",
     padding: "8px",
     textAlign: "center",
     verticalAlign: "middle",
+    maxWidth: "160px",
+    maxHeight: "100px",
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
   };
 
   const getUniqueArtists = () => {
@@ -707,6 +718,7 @@ const AllArtworksByExhibition = () => {
                 marginTop: "20px",
                 direction: "rtl",
                 fontSize: "14px",
+                tableLayout: "fixed", // ✅ Force fixed layout
               }}
             >
               <thead>
@@ -726,9 +738,11 @@ const AllArtworksByExhibition = () => {
                     key={art.id}
                     style={{
                       height: "120px",
+                      maxHeight: "120px",
                       verticalAlign: "middle",
                       breakInside: "avoid",
                       pageBreakInside: "avoid",
+                      overflow: "hidden",
                     }}
                   >
                     <td
@@ -754,31 +768,32 @@ const AllArtworksByExhibition = () => {
                         <img
                           src={art.imageUrl}
                           alt="art"
+                          onError={(e) => (e.target.src = "/placeholder.jpg")}
                           style={{
-                            maxHeight: "100%",
-                            maxWidth: "100%",
-                            objectFit: "contain",
+                            height: "80px",
+                            width: "100px",
+                            objectFit: "cover",
                             display: "block",
                           }}
                         />
                       </div>
                     </td>
-                    <td style={cellStyle}>{art.size || "-"}</td>
-                    <td style={cellStyle}>{art.technique || "-"}</td>
-                    <td style={cellStyle}>
+                    <td style={{ ...cellStyle }}>{art.size || "-"}</td>
+                    <td style={{ ...cellStyle }}>{art.technique || "-"}</td>
+                    <td style={{ ...cellStyle }}>
                       {art.userId ? art.artworkName || "-" : art.name || "-"}
                     </td>
-                    <td style={cellStyle}>
+                    <td style={{ ...cellStyle }}>
                       {art.userId
                         ? art.artist?.name || "-"
                         : typeof art.artist === "string"
                         ? art.artist
                         : art.artist?.name || "הוספה ע״י מנהל"}
                     </td>
-                    <td style={cellStyle}>
+                    <td style={{ ...cellStyle }}>
                       {art.phone || art.artist?.phone || "-"}
                     </td>
-                    <td style={cellStyle}>{index + 1}</td>
+                    <td style={{ ...cellStyle }}>{index + 1}</td>
                   </tr>
                 ))}
               </tbody>
