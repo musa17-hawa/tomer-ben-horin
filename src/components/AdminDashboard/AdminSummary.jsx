@@ -212,186 +212,99 @@
 
 // export default AdminSummary;
 import React, { useEffect, useState } from "react";
-import {
-  getDocs,
-  collection,
-  query,
-  where,
-  orderBy,
-  limit,
-} from "firebase/firestore";
-import { db } from "../../firebase/config";
-import {
-  FaUserAlt,
-  FaPaintBrush,
-  FaCheck,
-  FaClock,
-  FaImage,
-} from "react-icons/fa";
+import { collection, getDocs, query, doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import { FaUser, FaImage, FaThLarge, FaPaintBrush } from "react-icons/fa";
 
 const AdminSummary = () => {
-  const [artistsCount, setArtistsCount] = useState(0);
-  const [artworksCount, setArtworksCount] = useState(0);
-  const [approvedCount, setApprovedCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0);
-  const [galleriesCount, setGalleriesCount] = useState(0);
-  const [openExhibitions, setOpenExhibitions] = useState([]);
+  const [artistCount, setArtistCount] = useState(0);
+  const [galleryCount, setGalleryCount] = useState(0);
+  const [exhibitionCount, setExhibitionCount] = useState(0);
+  const [artworkCount, setArtworkCount] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Count artists
-        const usersSnap = await getDocs(collection(db, "users"));
-        const artists = usersSnap.docs.filter((doc) => !doc.data().isAdmin);
-        setArtistsCount(artists.length);
+        const usersSnapshot = await getDocs(collection(db, "users"));
+        setArtistCount(usersSnapshot.size);
 
-        // 2. Count galleries
-        const galleriesSnap = await getDocs(collection(db, "galleries"));
-        setGalleriesCount(galleriesSnap.size);
+        const galleriesSnapshot = await getDocs(collection(db, "galleries"));
+        setGalleryCount(galleriesSnapshot.size);
 
-        // 3. Count artworks ONLY from /exhibition_artworks/{exhibitionId}/artworks
-        const exhibitionsSnap = await getDocs(
+        const exhibitionsSnapshot = await getDocs(
+          collection(db, "exhibitions")
+        );
+        setExhibitionCount(exhibitionsSnapshot.size);
+
+        // Count artworks from /exhibition_artworks/{exhibitionId}/artworks
+        let totalArtworks = 0;
+        const exhibitionArtworksSnapshot = await getDocs(
           collection(db, "exhibition_artworks")
         );
 
-        let totalArtworks = 0;
-        let approvedArtworks = 0;
-        const pendingExhibitionIds = new Set();
-
-        for (const exhibitionDoc of exhibitionsSnap.docs) {
-          const exhibitionId = exhibitionDoc.id;
-          const artworksSnap = await getDocs(
-            collection(db, `exhibition_artworks/${exhibitionId}/artworks`)
+        for (const exhibitionDoc of exhibitionArtworksSnapshot.docs) {
+          const artworksCollection = collection(
+            db,
+            `exhibition_artworks/${exhibitionDoc.id}/artworks`
           );
-
-          for (const artworkDoc of artworksSnap.docs) {
-            const art = artworkDoc.data();
-            totalArtworks++;
-
-            // DEBUG: log the approval value
-            console.log(`Artwork: ${artworkDoc.id}, approved =`, art.approved);
-
-            // FIX: force check as string for maximum safety
-            const approvedValue = String(art.approved).toLowerCase();
-
-            if (approvedValue === "true") {
-              approvedArtworks++;
-            } else if (approvedValue === "false") {
-              pendingExhibitionIds.add(exhibitionId);
-            }
-          }
+          const artworksSnapshot = await getDocs(artworksCollection);
+          totalArtworks += artworksSnapshot.size;
         }
-
-        setArtworksCount(totalArtworks);
-        setApprovedCount(approvedArtworks);
-        setPendingCount(pendingExhibitionIds.size);
-
-        console.table({
-          totalArtworks,
-          approvedArtworks,
-          pendingCount: pendingExhibitionIds.size,
-        });
-
-        // 4. Latest open exhibitions
-        const openExhibitionsSnap = await getDocs(
-          query(
-            collection(db, "exhibitions"),
-            where("status", "==", "open"),
-            orderBy("startDate", "desc"),
-            limit(4)
-          )
-        );
-
-        const exhibitions = openExhibitionsSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setOpenExhibitions(exhibitions);
+        setArtworkCount(totalArtworks);
       } catch (error) {
-        console.error("שגיאה בטעינת הסיכום:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
     fetchData();
   }, []);
 
-  const formatDate = (date) => {
-    try {
-      if (!date) return "לא זמין";
-      const d =
-        typeof date.toDate === "function" ? date.toDate() : new Date(date);
-      return d.toLocaleDateString("he-IL");
-    } catch {
-      return "לא זמין";
-    }
-  };
+  const cards = [
+    {
+      label: 'סה"כ גלריות',
+      value: galleryCount,
+      icon: <FaImage size={28} />,
+    },
+    {
+      label: 'סה"כ תערוכות',
+      value: exhibitionCount,
+      icon: <FaThLarge size={28} />,
+    },
+    {
+      label: 'סה"כ יצירות',
+      value: artworkCount,
+      icon: <FaPaintBrush size={28} />,
+    },
+    {
+      label: 'סה"כ אמנים',
+      value: artistCount,
+      icon: <FaUser size={28} />,
+    },
+  ];
 
   return (
-    <div className="p-6 text-right" dir="rtl">
-      <h2 className="text-3xl font-bold text-[#fd3470] mb-8">
+    <div className="p-6">
+      <h2 className="text-2xl font-bold text-[#fd3470] mb-6">
         לוח ניהול - סיכום כללי
       </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
-        <SummaryCard
-          label="סה״כ אמנים"
-          value={artistsCount}
-          icon={<FaUserAlt />}
-        />
-        <SummaryCard
-          label="סה״כ יצירות"
-          value={artworksCount}
-          icon={<FaPaintBrush />}
-        />
-        <SummaryCard label="מאושרות" value={approvedCount} icon={<FaCheck />} />
-        <SummaryCard
-          label="תערוכות עם יצירות ממתינות"
-          value={pendingCount}
-          icon={<FaClock />}
-        />
-        <SummaryCard
-          label="סה״כ גלריות"
-          value={galleriesCount}
-          icon={<FaImage />}
-        />
-      </div>
-
-      <h3 className="text-2xl font-semibold text-gray-700 mb-4">
-        התערוכות הפתוחות האחרונות
-      </h3>
-
-      <div className="flex flex-col gap-6">
-        {openExhibitions.length === 0 ? (
-          <p className="text-gray-500">לא נמצאו תערוכות פתוחות.</p>
-        ) : (
-          openExhibitions.map((exh) => (
-            <div
-              key={exh.id}
-              className="bg-white rounded-xl shadow-md p-4 border-r-4 border-[#fd3470]"
-            >
-              <h4 className="text-lg font-bold text-[#fd3470] mb-2">
-                {exh.title || "ללא כותרת"}
-              </h4>
-              <p className="text-sm text-gray-600 mb-1">
-                תאריך התחלה: {formatDate(exh.startDate)}
-              </p>
-              {exh.location && (
-                <p className="text-sm text-gray-600">מיקום: {exh.location}</p>
-              )}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        {cards.map((card, index) => (
+          <div
+            key={index}
+            className="bg-white rounded-xl shadow-md p-6 flex flex-col items-center justify-center border-t-4 border-[#fd3470]"
+          >
+            <div className="text-[#fd3470] mb-2">{card.icon}</div>
+            <div className="text-gray-800 text-lg font-semibold">
+              {card.label}
             </div>
-          ))
-        )}
+            <div className="text-2xl font-bold text-[#fd3470]">
+              {card.value}
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
 };
-
-const SummaryCard = ({ label, value, icon }) => (
-  <div className="bg-white border-t-4 border-[#fd3470] shadow-md rounded-xl p-6 flex flex-col items-center justify-center text-center">
-    <div className="text-3xl text-[#fd3470] mb-2">{icon}</div>
-    <div className="text-gray-600 font-medium">{label}</div>
-    <div className="text-xl font-bold">{value}</div>
-  </div>
-);
 
 export default AdminSummary;
