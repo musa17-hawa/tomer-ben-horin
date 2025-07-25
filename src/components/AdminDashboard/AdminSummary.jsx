@@ -222,47 +222,62 @@ import {
   limit,
 } from "firebase/firestore";
 import { db } from "../../firebase/config";
-import { FaUserAlt, FaPaintBrush, FaCheck, FaClock } from "react-icons/fa";
+import {
+  FaUserAlt,
+  FaPaintBrush,
+  FaCheck,
+  FaClock,
+  FaImage,
+} from "react-icons/fa";
 
 const AdminSummary = () => {
   const [artistsCount, setArtistsCount] = useState(0);
   const [artworksCount, setArtworksCount] = useState(0);
   const [approvedCount, setApprovedCount] = useState(0);
-  const [pendingCount, setPendingCount] = useState(0); // Will count number of exhibitions that have unapproved artworks
+  const [pendingCount, setPendingCount] = useState(0);
+  const [galleriesCount, setGalleriesCount] = useState(0);
   const [openExhibitions, setOpenExhibitions] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Count all artists (non-admin users)
+        // 1. Count artists (non-admin users)
         const usersSnap = await getDocs(collection(db, "users"));
         const artists = usersSnap.docs.filter((doc) => !doc.data().isAdmin);
         setArtistsCount(artists.length);
 
-        // Fetch all artworks once
-        const allArtworksSnap = await getDocs(collectionGroup(db, "artworks"));
-        const allArtworks = allArtworksSnap.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setArtworksCount(allArtworks.length);
+        // 2. Count galleries
+        const galleriesSnap = await getDocs(collection(db, "galleries"));
+        setGalleriesCount(galleriesSnap.size);
 
-        // Count approved artworks
-        const approvedArtworks = allArtworks.filter(
-          (art) => art.approved === true
+        // 3. Get all artworks from centralized path
+        const artworksSnap = await getDocs(
+          collectionGroup(db, "artworks") // Make sure this only includes /exhibition_artworks/{exhibitionId}/artworks
         );
-        setApprovedCount(approvedArtworks.length);
 
-        // Count how many exhibitions have at least 1 pending artwork
-        const pendingArtworks = allArtworks.filter(
-          (art) => art.approved === false
-        );
-        const pendingExhibitionsSet = new Set(
-          pendingArtworks.map((art) => art.exhibitionId).filter(Boolean)
-        );
-        setPendingCount(pendingExhibitionsSet.size);
+        // Deduplicate by originalId or fallback to ID
+        const artworksMap = {};
+        artworksSnap.forEach((doc) => {
+          const art = { id: doc.id, ...doc.data() };
+          const key = art.originalId || art.id;
+          artworksMap[key] = art;
+        });
 
-        // Get 4 latest open exhibitions
+        const uniqueArtworks = Object.values(artworksMap);
+        setArtworksCount(uniqueArtworks.length);
+
+        // 4. Approved artworks
+        const approved = uniqueArtworks.filter((art) => art.approved === true);
+        setApprovedCount(approved.length);
+
+        // 5. Exhibitions with at least one unapproved artwork
+        const pending = uniqueArtworks.filter((art) => art.approved === false);
+        const pendingExhibitions = new Set(
+          pending.map((art) => art.exhibitionId).filter(Boolean)
+        );
+        setPendingCount(pendingExhibitions.size);
+
+        // 6. Latest 4 open exhibitions
         const exhibitionsSnap = await getDocs(
           query(
             collection(db, "exhibitions"),
@@ -276,10 +291,9 @@ const AdminSummary = () => {
           id: doc.id,
           ...doc.data(),
         }));
-
         setOpenExhibitions(exhibitions);
       } catch (error) {
-        console.error("שגיאה בטעינת הסיכום:", error.message);
+        console.error("שגיאה בטעינת הסיכום:", error);
       }
     };
 
@@ -287,12 +301,11 @@ const AdminSummary = () => {
   }, []);
 
   const formatDate = (date) => {
-    if (!date) return "לא זמין";
-    if (typeof date.toDate === "function") {
-      return date.toDate().toLocaleDateString("he-IL");
-    }
     try {
-      return new Date(date).toLocaleDateString("he-IL");
+      if (!date) return "לא זמין";
+      const d =
+        typeof date.toDate === "function" ? date.toDate() : new Date(date);
+      return d.toLocaleDateString("he-IL");
     } catch {
       return "לא זמין";
     }
@@ -304,7 +317,7 @@ const AdminSummary = () => {
         לוח ניהול - סיכום כללי
       </h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
         <SummaryCard
           label="סה״כ אמנים"
           value={artistsCount}
@@ -317,15 +330,21 @@ const AdminSummary = () => {
         />
         <SummaryCard label="מאושרות" value={approvedCount} icon={<FaCheck />} />
         <SummaryCard
-          label="מספר גלריות שצריך לאשר"
+          label="תערוכות עם יצירות ממתינות"
           value={pendingCount}
           icon={<FaClock />}
+        />
+        <SummaryCard
+          label="סה״כ גלריות"
+          value={galleriesCount}
+          icon={<FaImage />}
         />
       </div>
 
       <h3 className="text-2xl font-semibold text-gray-700 mb-4">
         התערוכות הפתוחות האחרונות
       </h3>
+
       <div className="flex flex-col gap-6">
         {openExhibitions.length === 0 ? (
           <p className="text-gray-500">לא נמצאו תערוכות פתוחות.</p>
