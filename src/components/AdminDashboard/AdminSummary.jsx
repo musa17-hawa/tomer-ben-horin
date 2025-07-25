@@ -379,17 +379,21 @@ const AdminSummary = () => {
       }
       setTotalArtworks(artworkCount);
 
-      // Get next 4 upcoming exhibitions (ordered by startDate)
+      // Get next 4 upcoming open exhibitions (ordered by startDate)
       const now = Timestamp.now();
       const comingQuery = query(
         collection(db, "exhibitions"),
+        where("status", "==", "open"),
         where("startDate", ">", now),
         orderBy("startDate", "asc"),
         limit(4)
       );
       const comingSnap = await getDocs(comingQuery);
       setComingSoon(
-        comingSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+        comingSnap.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
       );
     } catch (error) {
       console.error("Error fetching admin summary:", error);
