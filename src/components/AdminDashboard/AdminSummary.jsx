@@ -240,7 +240,7 @@ const AdminSummary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Count non-admin users
+        // 1. Count artists
         const usersSnap = await getDocs(collection(db, "users"));
         const artists = usersSnap.docs.filter((doc) => !doc.data().isAdmin);
         setArtistsCount(artists.length);
@@ -250,38 +250,50 @@ const AdminSummary = () => {
         setGalleriesCount(galleriesSnap.size);
 
         // 3. Count artworks ONLY from /exhibition_artworks/{exhibitionId}/artworks
-        const exhibitionArtworksSnap = await getDocs(
+        const exhibitionsSnap = await getDocs(
           collection(db, "exhibition_artworks")
         );
 
         let totalArtworks = 0;
         let approvedArtworks = 0;
-        const pendingExhibitions = new Set();
+        const pendingExhibitionIds = new Set();
 
-        for (const doc of exhibitionArtworksSnap.docs) {
-          const exhibitionId = doc.id;
+        for (const exhibitionDoc of exhibitionsSnap.docs) {
+          const exhibitionId = exhibitionDoc.id;
           const artworksSnap = await getDocs(
             collection(db, `exhibition_artworks/${exhibitionId}/artworks`)
           );
 
-          artworksSnap.forEach((artDoc) => {
-            const art = artDoc.data();
+          for (const artworkDoc of artworksSnap.docs) {
+            const art = artworkDoc.data();
             totalArtworks++;
 
-            if (art.approved === true) {
+            // DEBUG: log the approval value
+            console.log(`Artwork: ${artworkDoc.id}, approved =`, art.approved);
+
+            // FIX: force check as string for maximum safety
+            const approvedValue = String(art.approved).toLowerCase();
+
+            if (approvedValue === "true") {
               approvedArtworks++;
-            } else if (art.approved === false) {
-              pendingExhibitions.add(exhibitionId);
+            } else if (approvedValue === "false") {
+              pendingExhibitionIds.add(exhibitionId);
             }
-          });
+          }
         }
 
         setArtworksCount(totalArtworks);
         setApprovedCount(approvedArtworks);
-        setPendingCount(pendingExhibitions.size);
+        setPendingCount(pendingExhibitionIds.size);
 
-        // 4. Get last 4 open exhibitions
-        const exhibitionsSnap = await getDocs(
+        console.table({
+          totalArtworks,
+          approvedArtworks,
+          pendingCount: pendingExhibitionIds.size,
+        });
+
+        // 4. Latest open exhibitions
+        const openExhibitionsSnap = await getDocs(
           query(
             collection(db, "exhibitions"),
             where("status", "==", "open"),
@@ -290,7 +302,7 @@ const AdminSummary = () => {
           )
         );
 
-        const exhibitions = exhibitionsSnap.docs.map((doc) => ({
+        const exhibitions = openExhibitionsSnap.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
