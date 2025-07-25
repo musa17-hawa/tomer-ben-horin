@@ -215,7 +215,6 @@ import React, { useEffect, useState } from "react";
 import {
   getDocs,
   collection,
-  collectionGroup,
   query,
   where,
   orderBy,
@@ -250,34 +249,39 @@ const AdminSummary = () => {
         const galleriesSnap = await getDocs(collection(db, "galleries"));
         setGalleriesCount(galleriesSnap.size);
 
-        // 3. Get all artworks from centralized path
-        const artworksSnap = await getDocs(
-          collectionGroup(db, "artworks") // Make sure this only includes /exhibition_artworks/{exhibitionId}/artworks
+        // 3. Get all artworks ONLY from /exhibition_artworks/
+        const exhibitionArtworksSnap = await getDocs(
+          collection(db, "exhibition_artworks")
         );
 
-        // Deduplicate by originalId or fallback to ID
-        const artworksMap = {};
-        artworksSnap.forEach((doc) => {
-          const art = { id: doc.id, ...doc.data() };
-          const key = art.originalId || art.id;
-          artworksMap[key] = art;
-        });
+        let totalArtworks = 0;
+        let approved = 0;
+        const pendingExhibitionSet = new Set();
 
-        const uniqueArtworks = Object.values(artworksMap);
-        setArtworksCount(uniqueArtworks.length);
+        for (const doc of exhibitionArtworksSnap.docs) {
+          const exhibitionId = doc.id;
+          const artworksRef = collection(
+            db,
+            `exhibition_artworks/${exhibitionId}/artworks`
+          );
+          const artworksSnap = await getDocs(artworksRef);
 
-        // 4. Approved artworks
-        const approved = uniqueArtworks.filter((art) => art.approved === true);
-        setApprovedCount(approved.length);
+          artworksSnap.forEach((artDoc) => {
+            const art = artDoc.data();
+            totalArtworks++;
+            if (art.approved === true) {
+              approved++;
+            } else if (art.approved === false) {
+              pendingExhibitionSet.add(exhibitionId);
+            }
+          });
+        }
 
-        // 5. Exhibitions with at least one unapproved artwork
-        const pending = uniqueArtworks.filter((art) => art.approved === false);
-        const pendingExhibitions = new Set(
-          pending.map((art) => art.exhibitionId).filter(Boolean)
-        );
-        setPendingCount(pendingExhibitions.size);
+        setArtworksCount(totalArtworks);
+        setApprovedCount(approved);
+        setPendingCount(pendingExhibitionSet.size);
 
-        // 6. Latest 4 open exhibitions
+        // 4. Get 4 latest open exhibitions
         const exhibitionsSnap = await getDocs(
           query(
             collection(db, "exhibitions"),
