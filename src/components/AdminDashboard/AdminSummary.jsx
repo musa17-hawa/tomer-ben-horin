@@ -213,7 +213,7 @@
 // export default AdminSummary;
 import React, { useEffect, useState } from "react";
 import { collection, getDocs, query, doc, getDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db } from "../../firebase/config";
 import { FaUser, FaImage, FaThLarge, FaPaintBrush } from "react-icons/fa";
 
 const AdminSummary = () => {
