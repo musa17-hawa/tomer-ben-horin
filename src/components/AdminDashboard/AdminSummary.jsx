@@ -240,7 +240,7 @@ const AdminSummary = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // 1. Count artists (non-admin users)
+        // 1. Count non-admin users
         const usersSnap = await getDocs(collection(db, "users"));
         const artists = usersSnap.docs.filter((doc) => !doc.data().isAdmin);
         setArtistsCount(artists.length);
@@ -249,39 +249,38 @@ const AdminSummary = () => {
         const galleriesSnap = await getDocs(collection(db, "galleries"));
         setGalleriesCount(galleriesSnap.size);
 
-        // 3. Get all artworks ONLY from /exhibition_artworks/
+        // 3. Count artworks ONLY from /exhibition_artworks/{exhibitionId}/artworks
         const exhibitionArtworksSnap = await getDocs(
           collection(db, "exhibition_artworks")
         );
 
         let totalArtworks = 0;
-        let approved = 0;
-        const pendingExhibitionSet = new Set();
+        let approvedArtworks = 0;
+        const pendingExhibitions = new Set();
 
         for (const doc of exhibitionArtworksSnap.docs) {
           const exhibitionId = doc.id;
-          const artworksRef = collection(
-            db,
-            `exhibition_artworks/${exhibitionId}/artworks`
+          const artworksSnap = await getDocs(
+            collection(db, `exhibition_artworks/${exhibitionId}/artworks`)
           );
-          const artworksSnap = await getDocs(artworksRef);
 
           artworksSnap.forEach((artDoc) => {
             const art = artDoc.data();
             totalArtworks++;
+
             if (art.approved === true) {
-              approved++;
+              approvedArtworks++;
             } else if (art.approved === false) {
-              pendingExhibitionSet.add(exhibitionId);
+              pendingExhibitions.add(exhibitionId);
             }
           });
         }
 
         setArtworksCount(totalArtworks);
-        setApprovedCount(approved);
-        setPendingCount(pendingExhibitionSet.size);
+        setApprovedCount(approvedArtworks);
+        setPendingCount(pendingExhibitions.size);
 
-        // 4. Get 4 latest open exhibitions
+        // 4. Get last 4 open exhibitions
         const exhibitionsSnap = await getDocs(
           query(
             collection(db, "exhibitions"),
